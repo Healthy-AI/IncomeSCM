@@ -81,10 +81,10 @@ dobs = pd.read_pickle('samples/IncomeSCM-1.0.CATE_default.pkl')
 d1 = pd.read_pickle('samples/IncomeSCM-1.0.CATE_no.pkl')
 d0 = pd.read_pickle('samples/IncomeSCM-1.0.CATE_full.pkl')
 
-model = S_learner(base_estimator=..., c_int='studies', c_out='income', c_adj=[...]).fit(dobs)     # c_adj is the set of adjustment variables.
-                                                                                                  # base_estimator is any regression estimator. For the example to work
-                                                                                                  #   out of the box, it must handle categorical attributes in dobs[c_adj]
-                                                                                                  #   Alternatively, one-hot encoders can be used in e.g., a pipeline
+model = S_learner(base_estimator=..., c_int='studies', c_out='income', c_adj=[...]).fit(dobs) # c_adj is the set of adjustment variables.
+                                                                                              # base_estimator is any regression estimator. For the example to work
+                                                                                              #   out of the box, it must handle categorical attributes in dobs[c_adj]
+                                                                                              #   Alternatively, one-hot encoders can be used in e.g., a pipeline
 
 yp1 = model.predict_outcomes(d1)
 yp0 = model.predict_outcomes(d0)
