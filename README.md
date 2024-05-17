@@ -4,7 +4,7 @@ IncomeSCM is a time-series simulator based on the [Adult dataset](http://archive
 
 It has been used to construct a cross-sectional benchmark data set for conditional average treatment effect (CATE) estimation, IncomeSCM-1.0.CATE. The files for this benchmark are contained in [IncomeSCM-1.0.CATE.zip](samples/IncomeSCM-1.0.CATE.zip).
 
-To replicate the results in [ADD PAPER WHEN AVAILABLE], download this repository, ensuring that required prerequisites are installed and run: 
+To replicate the results in [ADD PAPER], download this repository, ensuring that required prerequisites are installed and run: 
 ```console
 pip install scikit-learn==1.4.1.post1 pandas==2.0.1 PyYAML==6.0 xgboost==2.0.0 matplotlib==3.7.1
 git clone git@github.com:Healthy-AI/IncomeSCM.git
