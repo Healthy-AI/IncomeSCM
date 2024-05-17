@@ -6,6 +6,13 @@ from sklearn.base import BaseEstimator
 from .util import *
 from .samplers import *
 
+def sampler_score(estimator):
+    if type(estimator) in [LogisticSampler, RandomForestClassifierSampler]:
+        return estimator.auc_
+    elif type(estimator) in [LinearGaussianSampler, GaussianRegressionSampler, GaussianRandomForestSampler, ZeroOrGaussianRegressionSampler]:
+        return estimator.r2_
+    else:
+        return None
 
 class MarkovARM():
     """
@@ -150,6 +157,7 @@ class MarkovARM():
             if isinstance(Mv, Sampler):
                 z = df[[v.name]+v.parents].dropna()
 
+                print('Fitting variable %s' % k)
                 if len(v.parents) < 1:
                     Mv.fit(z[v.name])                    
                 else:
@@ -157,6 +165,9 @@ class MarkovARM():
                         Mv.fit(self.transf_.transform(z[v.parents]), z[v.name])
                     else:
                         Mv.fit(z[v.parents], z[v.name])
+                    _score = sampler_score(Mv)
+                    if not _score is None:
+                        print('In-sample fitting score: %.4f' % _score)
 
             self.samplers_[k] = Mv 
             

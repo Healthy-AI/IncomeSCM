@@ -4,7 +4,7 @@ import inspect
 
 from sklearn.linear_model import LinearRegression, Ridge, LogisticRegression
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, r2_score, roc_auc_score
 from sklearn.base import BaseEstimator
 
 from inspect import isclass
@@ -138,6 +138,9 @@ class LogisticSampler(LogisticRegression, Sampler):
     
     def fit(self, x, y, **kwargs):
         super().fit(x, y, **kwargs)
+
+        self.auc_ = roc_auc_score(y, self.predict_proba(x), multi_class='ovr')
+
         self.fitted = True
         
         return self
@@ -155,6 +158,8 @@ class RandomForestClassifierSampler(RandomForestClassifier, Sampler):
     def fit(self, x, y, **kwargs):
         super().fit(x, y, **kwargs)
         
+        self.auc_ = roc_auc_score(y, self.predict_proba(x), multi_class='ovr')
+
         self.fitted = True
         
         return self
@@ -182,6 +187,7 @@ class LinearGaussianSampler(LinearRegression, Sampler):
         super().fit(x, y, **kwargs)
         
         self.mse_ = mean_squared_error(y, self.predict(x))
+        self.r2_ = mean_squared_error(y, self.predict(x))
         
         self.fitted = True
         
@@ -214,6 +220,7 @@ class GaussianRegressionSampler(BaseEstimator, Sampler):
         self.estimator.fit(x, y, **kwargs)
         
         self.mse_ = mean_squared_error(y, self.estimator.predict(x))
+        self.r2_ = r2_score(y, self.estimator.predict(x))
         
         self.fitted = True
         
@@ -275,10 +282,12 @@ class ZeroOrGaussianRegressionSampler(BaseEstimator, Sampler):
         self.estimator.fit(x[y != 0], y[y != 0], **kwargs)
         
         self.mse_ = mean_squared_error(y[y != 0], self.estimator.predict(x[y != 0]))
+        self.r2_ = r2_score(y[y != 0], self.estimator.predict(x[y != 0]))
         
         self.fitted = True
         
         return self
+
     
 class UniformRegressionSampler(BaseEstimator, Sampler):
     

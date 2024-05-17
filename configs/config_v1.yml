@@ -17,7 +17,7 @@ samples:
   seed: 1
   path: samples/
   policy: ['default', 'full', 'no']  # 'default', or 'full', 'no'
-  n_samples: 10000
+  n_samples: 50000
   horizon: 5
 
 figures: 
