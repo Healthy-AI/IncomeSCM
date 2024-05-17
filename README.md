@@ -4,6 +4,17 @@ IncomeSCM is a time-series simulator based on the [Adult dataset](http://archive
 
 It has been used to construct a cross-sectional benchmark data set for conditional average treatment effect (CATE) estimation, IncomeSCM-1.0.CATE. The files for this benchmark are contained in [IncomeSCM-1.0.CATE.zip](samples/IncomeSCM-1.0.CATE.zip).
 
+To replicate the results in [ADD PAPER WHEN AVAILABLE], download this repository, ensuring that required prerequisites are installed and run: 
+```console
+pip install scikit-learn==1.4.1.post1 pandas==2.0.1 PyYAML==6.0 xgboost==2.0.0 matplotlib==3.7.1
+git clone git@github.com:Healthy-AI/IncomeSCM.git
+
+python fit.py
+python sample.py
+python estimate.py
+python present_results.py
+```
+
 ## Using the CATE estimation data set (IncomeSCM-1.0.CATE)
 
 The IncomeSCM-1.0.CATE data set is sampled from the IncomeSCM-1.0 simulator, fit with the ```config_v1.yml``` configuration file.
@@ -112,7 +123,7 @@ A real fitting and evaluation example is given in ```estimate.py```
   ```
 * Download the IncomeSCM simulator
   ```
-  git clone git@github.com:Healthy-AI/IncomeSim.git
+  git clone git@github.com:Healthy-AI/IncomeSCM.git
   ```
 
 * The IncomeSCM simulator is fit to the [Adult dataset](http://archive.ics.uci.edu/dataset/2/adult) data set.
@@ -167,7 +178,7 @@ The slides for the lecture can be found [here](demos/ProbAI_Causal_machine_learn
 
 **Installing prerequisites**
 
-* IncomeSim is written in Python 3 and based on the Scikit-learn package and the Adult dataset. 
+* IncomeSCM is written in Python 3 and based on the Scikit-learn package and the Adult dataset. 
 * Start by installing python modules ```pandas, numpy, scikit-learn, jupyter, requests, matplotlib```
 
 **Preparing the data files** 
@@ -175,7 +186,7 @@ The slides for the lecture can be found [here](demos/ProbAI_Causal_machine_learn
 You don't need to do this if you use the ProbAI notebook, the notebook does this automatically!
 
 * Download the [Adult dataset](http://archive.ics.uci.edu/dataset/2/adult)
-* Create a folder ``` data/income ``` in the IncomeSim root folder
+* Create a folder ``` data/income ``` in the IncomeSCM root folder
 * Place the files ``` adult.data ```, ``` adult.names ``` and ``` adult.test ``` in ``` data/income ```
 
 **Generating data**
