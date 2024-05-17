@@ -8,6 +8,7 @@ To replicate the results in [ADD PAPER], download this repository, ensuring that
 ```console
 pip install scikit-learn==1.4.1.post1 pandas==2.0.1 PyYAML==6.0 xgboost==2.0.0 matplotlib==3.7.1
 git clone git@github.com:Healthy-AI/IncomeSCM.git
+cd IncomeSCM
 
 python fit.py
 python sample.py
