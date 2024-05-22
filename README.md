@@ -62,7 +62,7 @@ $$\mathrm{CATE}(z) = \mathbb{E}[\Delta \mid Z=z]$$
 where $Z \subseteq X$ is a given set of covariates. For this, we consider three main conditioning sets: 
 1. $Z$ is the set of all pre-intervention covariates
 2. $Z$ is the set of direct causes of $A$
-3. $Z$ is a subset of covariates which is an invalid adjustment set. Specifically, $Z = (\mathrm{age}, \mathrm{education}, \mathrm{income\\_prev})$.
+3. $Z$ is limited to ```hours-per-week```$_1$
 
 In addition, we seek to estimate the average treatment effect (ATE), $$\mathrm{ATE} = \mathbb{E}[\Delta]$$ using the first two conditioning sets above for adjustment. 
 
