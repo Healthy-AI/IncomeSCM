@@ -6,7 +6,7 @@ It has been used to construct a cross-sectional benchmark data set for condition
 
 To replicate the results in [ADD PAPER], download this repository, ensuring that required prerequisites are installed and run: 
 ```
-pip install scikit-learn==1.4.1.post1 pandas==2.0.1 PyYAML==6.0 xgboost==2.0.0 matplotlib==3.7.1
+pip install scikit-learn==1.4.1.post1 pandas==2.0.1 PyYAML==6.0 xgboost==2.0.0 matplotlib==3.7.1 notebook==7.2.0
 git clone git@github.com:Healthy-AI/IncomeSCM.git
 cd IncomeSCM
 
@@ -120,7 +120,7 @@ A real fitting and evaluation example is given in ```estimate.py```
 
 * To reproduce results or use the simulator, start by installing python modules ```pandas, numpy, scikit-learn, jupyter, matplotlib, yaml, xgboost```, for example in a virtual environment. Below, we list the versions used during development and testing. 
   ```
-  pip install scikit-learn==1.4.1.post1 pandas==2.0.1 PyYAML==6.0 xgboost==2.0.0 matplotlib==3.7.1
+  pip install scikit-learn==1.4.1.post1 pandas==2.0.1 PyYAML==6.0 xgboost==2.0.0 matplotlib==3.7.1 notebook==7.2.0
   ```
 * Download the IncomeSCM simulator
   ```
