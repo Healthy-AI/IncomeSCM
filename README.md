@@ -1,12 +1,14 @@
 # IncomeSCM
 
-IncomeSCM is a time-series simulator based on the [Adult dataset](http://archive.ics.uci.edu/dataset/2/adult) intended for evaluation of causal effect estimators.
+**Author:** Fredrik D. Johansson
 
-It has been used to construct a cross-sectional benchmark data set for conditional average treatment effect (CATE) estimation, IncomeSCM-1.0.CATE. The files for this benchmark are contained in [IncomeSCM-1.0.CATE.zip](samples/IncomeSCM-1.0.CATE.zip).
+IncomeSCM is a time-series simulator intended for evaluation of causal effect estimators, based on the [Adult dataset](http://archive.ics.uci.edu/dataset/2/adult) by Barry Becker and Ronny Kohavi.
+
+The simulator has been used to construct a cross-sectional benchmark data set for conditional average treatment effect (CATE) estimation, IncomeSCM-1.0.CATE. The files for this benchmark are contained in [IncomeSCM-1.0.CATE.zip](samples/IncomeSCM-1.0.CATE.zip).
 
 To replicate the results in [ADD PAPER], download this repository, ensuring that required prerequisites are installed and run: 
 ```
-pip install scikit-learn==1.4.1.post1 pandas==2.0.1 PyYAML==6.0 xgboost==2.0.0 matplotlib==3.7.1
+pip install scikit-learn==1.4.1.post1 pandas==2.0.1 PyYAML==6.0 xgboost==2.0.0 matplotlib==3.7.1 notebook==7.2.0
 git clone git@github.com:Healthy-AI/IncomeSCM.git
 cd IncomeSCM
 
@@ -62,7 +64,7 @@ $$\mathrm{CATE}(z) = \mathbb{E}[\Delta \mid Z=z]$$
 where $Z \subseteq X$ is a given set of covariates. For this, we consider three main conditioning sets: 
 1. $Z$ is the set of all pre-intervention covariates
 2. $Z$ is the set of direct causes of $A$
-3. $Z$ is a subset of covariates which is an invalid adjustment set. Specifically, $Z = (\mathrm{age}, \mathrm{education}, \mathrm{income\\_prev})$.
+3. $Z$ is limited to ```hours-per-week```$_1$ (not a valid adjustment set)
 
 In addition, we seek to estimate the average treatment effect (ATE), $$\mathrm{ATE} = \mathbb{E}[\Delta]$$ using the first two conditioning sets above for adjustment. 
 
@@ -112,6 +114,21 @@ ae_ate = np.abs(ate_pred - ate_true)
 ```
 A real fitting and evaluation example is given in ```estimate.py```
 
+### Citing the data set
+
+When citing the data set, please use
+
+```Johansson, F. D. (2024). IncomeSCM: From tabular data set to time-series simulator and causal estimation benchmark. https://github.com/Healthy-AI/IncomeSCM/, 2024```
+
+```bibtex
+@misc{johansson2024incomescm,
+  title={IncomeSCM: From tabular data set to time-series simulator and causal estimation benchmark},
+  author={Johansson, Fredrik D.},
+  year={2024},
+  howpublished="\url{https://github.com/Healthy-AI/IncomeSCM}",
+}
+```
+
 ## Using the simulator and estimators (IncomeSCM-1.0)
 
 * IncomeSCM is written in Python 3 and based on the Scikit-learn package and the Adult dataset.
@@ -120,7 +137,7 @@ A real fitting and evaluation example is given in ```estimate.py```
 
 * To reproduce results or use the simulator, start by installing python modules ```pandas, numpy, scikit-learn, jupyter, matplotlib, yaml, xgboost```, for example in a virtual environment. Below, we list the versions used during development and testing. 
   ```
-  pip install scikit-learn==1.4.1.post1 pandas==2.0.1 PyYAML==6.0 xgboost==2.0.0 matplotlib==3.7.1
+  pip install scikit-learn==1.4.1.post1 pandas==2.0.1 PyYAML==6.0 xgboost==2.0.0 matplotlib==3.7.1 notebook==7.2.0
   ```
 * Download the IncomeSCM simulator
   ```
@@ -140,9 +157,15 @@ python sample.py [-c CONFIG_FILE]
 * This also uses the same default config file, which specifies which fitted model to use, how many samples are used, and from which (counterfactual) policy to sample. By default, 50 000 samples are generated from the "default" (observational) "full" and "no" policies.
 * The samples are stored (by default) in ```./samples/[SAMPLE_FILE_NAME].pkl```. The file name is determined by the version labels specified in the config file.
 
-
-
 # Papers using the data set 
+
+To be added when made public.
+
+# License
+
+Both IncomeSCM data set samples and the simulator itself are shared under the [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/legalcode) license. **Author:** Fredrik D. Johansson
+
+The [Adult data set](https://archive.ics.uci.edu/dataset/2/adult) by Barry Becker and Ronny Kohavi is also shared under CC BY 4.0. IncomeSCM does not host any part of the Adult data set and has made no permanent modifications to it. 
 
 <!--
 # Lectures using the data set 
