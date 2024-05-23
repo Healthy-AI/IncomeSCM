@@ -144,6 +144,10 @@ python sample.py [-c CONFIG_FILE]
 
 # Papers using the data set 
 
+# License
+
+Both data set samples and the simulator itself are shared under the [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/legalcode) license. The [Adult data set](https://archive.ics.uci.edu/dataset/2/adult) is also shared under CC BY 4.0.
+
 <!--
 # Lectures using the data set 
 
