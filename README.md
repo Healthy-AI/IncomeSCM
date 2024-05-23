@@ -114,6 +114,21 @@ ae_ate = np.abs(ate_pred - ate_true)
 ```
 A real fitting and evaluation example is given in ```estimate.py```
 
+### Citing the data set
+
+When citing the data set, please use
+
+```Johansson, F. D. (2024). IncomeSCM: From tabular data set to time-series simulator and causal estimation benchmark. 2024```
+
+```bibtex
+@misc{johansson2024incomescm,
+  title={IncomeSCM: From tabular data set to time-series simulator and causal estimation benchmark},
+  author={Johansson, Fredrik D.},
+  year={2024},
+  howpublished="\url{https://github.com/Healthy-AI/IncomeSCM}",
+}
+```
+
 ## Using the simulator and estimators (IncomeSCM-1.0)
 
 * IncomeSCM is written in Python 3 and based on the Scikit-learn package and the Adult dataset.
