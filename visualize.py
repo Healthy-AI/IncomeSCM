@@ -50,6 +50,18 @@ def visualize(cfg):
     plt.ylabel('CATE')
     save_crop_close(os.path.join(fdir, 'cate_vs_age.pdf'))
 
+    # Compute CATE by Age
+    bins = [(0,30), (31, 40), (41, 50), (51, 60), (61, 70), (71, 80), (81, 100)]
+    x = []
+    y = []
+    for i,j in bins:
+        x.append((i+j)/2)
+        y.append(dfc[(dfc['age']>=i) & (dfc['age']<j)]['cate'].mean())
+    plt.plot(x, y)
+    plt.xlabel('Age')
+    plt.ylabel('CATE')
+    save_crop_close(os.path.join(fdir, 'cate_vs_age_disc.pdf'))
+
     # Compute CATE by Education
     gb = dfc[['education-num', 'cate']].groupby('education-num', as_index=False).mean()
     plt.plot(gb['education-num'], gb['cate'])
@@ -64,6 +76,25 @@ def visualize(cfg):
     plt.ylabel('CATE')
     save_crop_close(os.path.join(fdir, 'cate_vs_sex.pdf'))
 
+    # Compute Work hours histogram
+    bins = [(i,i+19) for i in range(0,130,20)]
+    x = []
+    y = []
+    for i,j in bins:
+        x.append((i+j)/2)
+        y.append(dfc[(dfc['hours-per-week']>=i) & (dfc['hours-per-week']<j)]['cate'].mean())
+    plt.plot(x, y)
+    plt.xlabel('Hours-per-week')
+    plt.ylabel('CATE')
+    save_crop_close(os.path.join(fdir, 'cate_vs_hours-per-week_disc.pdf'))
+    print(bins)
+
+    # Compute CATE by hours-per-week
+    gb = dfc[['hours-per-week', 'cate']].groupby('hours-per-week', as_index=False).mean()
+    plt.bar(gb['hours-per-week'], gb['cate'])
+    plt.xlabel('hours-per-week')
+    plt.ylabel('CATE')
+    save_crop_close(os.path.join(fdir, 'cate_vs_hours-per-week.pdf'))
 
     """
     dfc = df0.copy()

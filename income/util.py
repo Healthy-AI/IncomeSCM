@@ -42,8 +42,11 @@ def load_model(path, label):
     """ Loads a simulator model
     """
     model_file = os.path.join(path, label+'.pkl')
-    clf = pkl.load(open(model_file, 'rb'))
-    return clf 
+    if os.path.isfile(model_file):
+        clf = pkl.load(open(model_file, 'rb'))
+        return clf 
+    else: 
+        return None
 
 
 class SubsetTransformer(TransformerMixin):

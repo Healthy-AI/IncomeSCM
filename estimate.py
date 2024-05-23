@@ -60,7 +60,7 @@ def run_experiment(cfg):
     results_dir = os.path.join(cfg.results.base_path, cfg.experiment.label)
     os.makedirs(results_dir, exist_ok=True)
 
-    # Fit estimators
+    # Results
     cv_results = {}
     fit_estimators = {}
     ope_results = {}
@@ -113,7 +113,7 @@ def run_experiment(cfg):
         # Save model
         clf = cv.best_estimator_
         save_model(cv, results_dir, '%s.%s.cv' % (cfg.experiment.label, i))
-        save_model(clf, results_dir, '%s.%s.cv' % (cfg.experiment.label, i))
+        save_model(clf, results_dir, '%s.%s.best' % (cfg.experiment.label, i))
         
         # Do OPE evaluation
         df0 = pd.read_pickle(os.path.join(cfg.data.path, cfg.data.control))
