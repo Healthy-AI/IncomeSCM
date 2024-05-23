@@ -146,7 +146,9 @@ To be added when made public.
 
 # License
 
-Both data set samples and the simulator itself are shared under the [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/legalcode) license. The [Adult data set](https://archive.ics.uci.edu/dataset/2/adult) by Barry Becker and Ronny Kohavi is also shared under CC BY 4.0. IncomeSCM does not host any part of the Adult data set and has made no permanent modifications to it. 
+Both data set samples and the simulator itself are shared under the [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/legalcode) license. 
+
+The [Adult data set](https://archive.ics.uci.edu/dataset/2/adult) by Barry Becker and Ronny Kohavi is also shared under CC BY 4.0. IncomeSCM does not host any part of the Adult data set and has made no permanent modifications to it. 
 
 <!--
 # Lectures using the data set 
