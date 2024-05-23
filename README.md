@@ -15,6 +15,7 @@ cd IncomeSCM
 python fit.py
 python sample.py
 python estimate.py
+python evaluate.py
 python present_results.py
 ```
 
