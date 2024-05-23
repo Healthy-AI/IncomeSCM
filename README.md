@@ -118,7 +118,7 @@ A real fitting and evaluation example is given in ```estimate.py```
 
 When citing the data set, please use
 
-```Johansson, F. D. (2024). IncomeSCM: From tabular data set to time-series simulator and causal estimation benchmark. 2024```
+```Johansson, F. D. (2024). IncomeSCM: From tabular data set to time-series simulator and causal estimation benchmark. https://github.com/Healthy-AI/IncomeSCM/, 2024```
 
 ```bibtex
 @misc{johansson2024incomescm,
