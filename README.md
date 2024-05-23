@@ -140,9 +140,9 @@ python sample.py [-c CONFIG_FILE]
 * This also uses the same default config file, which specifies which fitted model to use, how many samples are used, and from which (counterfactual) policy to sample. By default, 50 000 samples are generated from the "default" (observational) "full" and "no" policies.
 * The samples are stored (by default) in ```./samples/[SAMPLE_FILE_NAME].pkl```. The file name is determined by the version labels specified in the config file.
 
-
-
 # Papers using the data set 
+
+To be added when made public.
 
 # License
 
