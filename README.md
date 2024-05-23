@@ -1,8 +1,10 @@
 # IncomeSCM
 
+**Author:** Fredrik D. Johansson
+
 IncomeSCM is a time-series simulator intended for evaluation of causal effect estimators, based on the [Adult dataset](http://archive.ics.uci.edu/dataset/2/adult) by Barry Becker and Ronny Kohavi.
 
-It has been used to construct a cross-sectional benchmark data set for conditional average treatment effect (CATE) estimation, IncomeSCM-1.0.CATE. The files for this benchmark are contained in [IncomeSCM-1.0.CATE.zip](samples/IncomeSCM-1.0.CATE.zip).
+The simulator has been used to construct a cross-sectional benchmark data set for conditional average treatment effect (CATE) estimation, IncomeSCM-1.0.CATE. The files for this benchmark are contained in [IncomeSCM-1.0.CATE.zip](samples/IncomeSCM-1.0.CATE.zip).
 
 To replicate the results in [ADD PAPER], download this repository, ensuring that required prerequisites are installed and run: 
 ```
@@ -146,7 +148,7 @@ To be added when made public.
 
 # License
 
-Both IncomeSCM data set samples and the simulator itself are shared under the [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/legalcode) license. 
+Both IncomeSCM data set samples and the simulator itself are shared under the [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/legalcode) license. **Author:** Fredrik D. Johansson
 
 The [Adult data set](https://archive.ics.uci.edu/dataset/2/adult) by Barry Becker and Ronny Kohavi is also shared under CC BY 4.0. IncomeSCM does not host any part of the Adult data set and has made no permanent modifications to it. 
 
