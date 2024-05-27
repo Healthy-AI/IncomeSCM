@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 from income.util import *
-
+from income.data import *
 
 TABLE_LABELS = {
     'ipw-lr': 'IPW (LR)',
@@ -51,19 +51,72 @@ def present_results(cfg):
     r_path = os.path.join(results_dir, '%s.results.csv' % (cfg.experiment.label))
     df.to_csv(r_path)
 
+
+    def log_n_print(f, s):
+        f.write(s+'\n')
+        print(s)
+
+    f = open('paper_results.%s.tex' % cfg.experiment.label, 'w')
     
-    print('OPE AND FITTING RESULTS')
+    log_n_print(f, '# CATE AND FITTING RESULTS')
     for e, l in TABLE_LABELS.items(): 
         if (df['estimator']==e).sum()>0:
             r = df[df['estimator']==e].iloc[0]
-            print('%s & %.2f & (%.2f, %.2f) & %.0f & (%.0f, %.0f) & %.2f \\\\' % (l, r['CATE_R2_r'], r['CATE_R2_r_l'], r['CATE_R2_r_u'], r['ATE_AE_r'], r['ATE_AE_r_l'], r['ATE_AE_r_u'], r['test_R2']))
+            if e.startswith('ipw'):
+                log_n_print(f, '%s & %.2f & (%.2f, %.2f) & %.0f & (%.0f, %.0f) & %.2f \\\\' % (l, r['CATE_R2_r'], r['CATE_R2_r_l'], r['CATE_R2_r_u'], r['ATE_AE_r'], r['ATE_AE_r_l'], r['ATE_AE_r_u'], r['test_AUC']))
+            else:
+                log_n_print(f, '%s & %.2f & (%.2f, %.2f) & %.0f & (%.0f, %.0f) & %.2f \\\\' % (l, r['CATE_R2_r'], r['CATE_R2_r_l'], r['CATE_R2_r_u'], r['ATE_AE_r'], r['ATE_AE_r_l'], r['ATE_AE_r_u'], r['test_R2']))
 
-    print('OPE HPW RESULTS')
+    log_n_print(f, '\n\n# CATE HPW RESULTS')
     for e in ['s-xgbr', 's-rfr', 't-ridge', 't-xgbr', 't-rfr']:
         l = TABLE_LABELS[e]
         if (df['estimator']==e).sum()>0:
             r = df[df['estimator']==e].iloc[0]
-            print('%s & %.2f & (%.2f, %.2f)  \\\\' % (l, r['CATE_hpw_R2_r'], r['CATE_hpw_R2_r_l'], r['CATE_hpw_R2_r_u']))
+            log_n_print(f, '%s & %.2f & (%.2f, %.2f)  \\\\' % (l, r['CATE_hpw_R2_r'], r['CATE_hpw_R2_r_l'], r['CATE_hpw_R2_r_u']))
+
+
+
+    # TABLE 1
+    # Load data
+    D_tr, c_cat, c_num, c_out, c_features = load_income_data(cfg.data.path, download=False)
+    D_tr = D_tr.drop(columns=['income', 'studies'])
+
+    D_s = pd.read_pickle('samples/income_scm.v1_default_n50000_T5_s0.pkl')
+    D_s['income>50k'] = ((D_s['income_prev']>50000).astype(str)).astype('category')
+    D_tr['income>50k'] = (D_tr['income>50k']>0).astype(str).astype('category')
+
+    log_n_print(f, '\n\n# TABLE 1')
+    log_n_print(f,' & Simulated ($n=$%d) & Adult ($n=$%d) \\\\' % (D_s.shape[0], D_tr.shape[0]))
+    for c in D_s.columns: 
+        if D_s[c].dtype == 'category':
+            log_n_print(f, '%s \\\\' % c)
+            
+            for v in D_s[c].unique():
+                if c in D_tr.columns: 
+                    log_n_print(f, '\;\;\;\;%s & %d (%.1f) & %d (%.1f) \\\\' % (v.replace('&','\\&'), 
+                        (D_s[c]==v).sum(), 100*(D_s[c]==v).mean(), 
+                        (D_tr[c]==v).sum(), 100*(D_tr[c]==v).mean()))
+                else:
+                    log_n_print(f, '\;\;\;\;%s & %d (%.1f) & -- \\\\' % (v.replace('&','\\&'), 
+                        (D_s[c]==v).sum(), 100*(D_s[c]==v).mean()))
+                
+        else: 
+            lb = np.percentile(D_s[c], 25)
+            ub = np.percentile(D_s[c], 75)
+            
+            if c in D_tr.columns: 
+                lb_tr = np.percentile(D_tr[c], 25)
+                ub_tr = np.percentile(D_tr[c], 75)
+                log_n_print(f, '%s & %.1f (%.1f, %.1f) & %.1f (%.1f, %.1f) \\\\' % (c, D_s[c].mean(), 
+                    lb, ub, D_tr[c].mean(), lb_tr, ub_tr))
+            else:
+                log_n_print(f, '%s & %.1f (%.1f, %.1f) & -- \\\\' % (c, D_s[c].mean(), lb, ub))
+            
+
+
+
+
+    f.close()
 
 if __name__ == "__main__":
     

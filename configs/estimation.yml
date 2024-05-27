@@ -15,7 +15,7 @@ results:
 
 selection: 
   type: random # grid/random
-  n_iter: 10 # Used by random sampler
+  n_iter: 20 # Used by random sampler
   folds: 5
 
 data: 
@@ -32,15 +32,8 @@ estimators:
     estimator: 'IPWEstimator'
     weighted: [False]
     base_estimator: ['lr']
-    base_estimator__C: [0.01, 0.1, 1, 2, 10, 20, 100, 200, 1000]
+    base_estimator__C: [0.005, 0.01, 0.05, 0.1, 0.5, 1, 5, 10, 50, 100]
  
-
-  ipw-lr: 
-    label: 'IPWEstimator (LR)'
-    estimator: 'IPWEstimator'
-    weighted: [False]
-    base_estimator: ['lr']
-    base_estimator__C: [0.01, 0.1, 1, 2, 10, 20, 100, 200, 1000]
 
   ipw-rfc: 
     label: 'IPWEstimator (RandomForestClassifier)'
@@ -54,7 +47,7 @@ estimators:
     estimator: 'IPWEstimator'
     weighted: [True]
     base_estimator: ['lr']
-    base_estimator__C: [0.01, 0.1, 1, 2, 10, 20, 100, 200, 1000]
+    base_estimator__C: [0.005, 0.01, 0.05, 0.1, 0.5, 1, 5, 10, 50, 100]
 
   ipww-rfc: 
     label: 'IPWEstimator (RandomForestClassifier)'
@@ -67,15 +60,15 @@ estimators:
     label: 'S-learner (Ridge)'
     estimator: 'S-learner'
     base_estimator: ['ridge']
-    base_estimator__alpha: [0.01, 0.1, 1, 2, 10, 20, 100, 200, 1000]
+    base_estimator__alpha: [0.01, 0.02, 0.1, 0.2, 1, 2, 10, 20, 100, 200, 1000]
 
   t-ridge: 
     label: 'T-learner (Ridge)'
     estimator: 'T-learner'
     base_estimator0: ['ridge']
     base_estimator1: ['ridge']
-    base_estimator0__alpha: [0.01, 0.1, 1, 2, 10, 20, 100, 200, 1000]
-    base_estimator1__alpha: [0.01, 0.1, 1, 2, 10, 20, 100, 200, 1000]
+    base_estimator0__alpha: [0.01, 0.02, 0.1, 0.2, 1, 2, 10, 20, 100, 200, 1000]
+    base_estimator1__alpha: [0.01, 0.02, 0.1, 0.2, 1, 2, 10, 20, 100, 200, 1000]
 
   s-rfr: 
     label: 'S-learner (RandomForestRegressor)'

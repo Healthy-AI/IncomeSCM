@@ -18,18 +18,6 @@ def name_combiner(x,y):
     """ Used by column transformer for one-hot encoder """
     return str(x)+'__'+str(y)
 
-"""def score_df(estimator, X, y_true=None, score_func=r2_score, c_target='outcome',response_method=None, **kwargs):
-
-    if response_method is None or response_method == 'predict':
-        return score_func(X[c_target], estimator.predict(X), **kwargs)
-    elif response_method == 'predict_proba':
-        return score_func(X[c_target], estimator.predict_proba(X), **kwargs)
-    else:
-        raise Exception('Unknown response_method')
-
-def get_scorer_df(score_func, response_method=None, c_target='outcome', **kwargs):
-    return lambda e, X, y, k : score_df(e, X, y, score_func, c_target=c_target, response_method=response_method, **k)"""
-
 def get_pipeline(estimator, c_num, c_cat):
     """ Creates training pipeline for estimator given column description """
 
