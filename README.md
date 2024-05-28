@@ -162,7 +162,7 @@ python sample.py [-c CONFIG_FILE]
 
 # Papers using the data set 
 
-To be added when made public.
+* Technical report for the simulator: http://arxiv.org/abs/2405.16069
 
 # License
 
