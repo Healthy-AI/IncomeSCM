@@ -6,7 +6,7 @@ IncomeSCM is a time-series simulator intended for evaluation of causal effect es
 
 The simulator has been used to construct a cross-sectional benchmark data set for conditional average treatment effect (CATE) estimation, IncomeSCM-1.0.CATE. The files for this benchmark are contained in [IncomeSCM-1.0.CATE.zip](samples/IncomeSCM-1.0.CATE.zip).
 
-To replicate the results in [ADD PAPER], download this repository, ensuring that required prerequisites are installed and run: 
+To replicate the results in the [technical report](https://arxiv.org/abs/2405.16069), download this repository, ensuring that required prerequisites are installed and run: 
 ```
 pip install scikit-learn==1.4.1.post1 pandas==2.0.1 PyYAML==6.0 xgboost==2.0.0 matplotlib==3.7.1 notebook==7.2.0
 git clone git@github.com:Healthy-AI/IncomeSCM.git
@@ -15,7 +15,11 @@ cd IncomeSCM
 python fit.py
 python sample.py
 python estimate.py
+python evaluate.py
 python present_results.py
+python estimate.py -c configs/estimation_minimal.yml
+python evaluate.py -c configs/estimation_minimal.yml
+python present_results.py -c configs/estimation_minimal.yml
 ```
 
 ## Using the CATE estimation data set (IncomeSCM-1.0.CATE)
@@ -77,11 +81,13 @@ Instead, we sample both counterfactual outcomes for a fixed of baseline subjects
 
 ### File description
 
-The main data set files are:
+The main data set is stored as Pandas dataframes saved in Pickle (.pkl) files: 
   * ```IncomeSCM-1.0.CATE_default.pkl``` (V1 simulator, default policy ($A$ observational), 50 000 samples, horizon T=5, seed=0)
   * ```IncomeSCM-1.0.CATE_no.pkl``` (V1 simulator, "No studies" policy ($A \leftarrow 0$), 50 000 samples, horizon T=5, seed=1)
   * ```IncomeSCM-1.0.CATE_full.pkl``` (V1 simulator, "Full-time studies" policy ($A \leftarrow 1$), 50 000 samples, horizon T=5, seed=1)
   * All three files are contained in [IncomeSCM-1.0.CATE.zip](samples/IncomeSCM-1.0.CATE.zip)
+
+The data set can be loaded into Python using Pandas ```pd.read_pickle(...)```
 
 * **Training data**: The "default" policy data set represents observational data for causal effect estimators to learn from.
 * **Evaluation data**: The "full" and "no" policy data sets represent samples observed under alternative interventions ($A \leftarrow 1$ and $A \leftarrow 0$, respectively).
@@ -122,10 +128,13 @@ When citing the data set, please use
 
 ```bibtex
 @misc{johansson2024incomescm,
-  title={IncomeSCM: From tabular data set to time-series simulator and causal estimation benchmark},
-  author={Johansson, Fredrik D.},
-  year={2024},
-  howpublished="\url{https://github.com/Healthy-AI/IncomeSCM}",
+      title={IncomeSCM: From tabular data set to time-series simulator and causal estimation benchmark}, 
+      author={Fredrik D. Johansson},
+      year={2024},
+      eprint={2405.16069},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url="\url{https://github.com/Healthy-AI/IncomeSCM}",
 }
 ```
 
@@ -159,7 +168,7 @@ python sample.py [-c CONFIG_FILE]
 
 # Papers using the data set 
 
-To be added when made public.
+* Technical report for the simulator: http://arxiv.org/abs/2405.16069
 
 # License
 
