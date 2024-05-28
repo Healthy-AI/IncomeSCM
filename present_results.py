@@ -81,7 +81,7 @@ def present_results(cfg):
     D_tr, c_cat, c_num, c_out, c_features = load_income_data(cfg.data.path, download=False)
     D_tr = D_tr.drop(columns=['income', 'studies'])
 
-    D_s = pd.read_pickle('samples/income_scm.v1_default_n50000_T5_s0.pkl')
+    D_s = pd.read_pickle(cfg.data.observational)
     D_s['income>50k'] = ((D_s['income_prev']>50000).astype(str)).astype('category')
     D_tr['income>50k'] = (D_tr['income>50k']>0).astype(str).astype('category')
 

@@ -1,5 +1,5 @@
 experiment: 
-  label: '1.0'
+  label: '1.0.test'
 
 data: 
   label: income
@@ -9,16 +9,16 @@ data:
 simulator: 
   seed: 0
   path: models/
-  label: IncomeSCM-1.0
+  label: IncomeSCM-1.0.test
   seed: 0
 
 samples:
-  label: IncomeSCM-1.0
-  seed: [0,1]
+  label: IncomeSCM-1.0.test
+  seed: [0]
   path: samples/
-  policy: ['default', 'full', 'no']  # 'default', or 'full', 'no'
-  n_samples: 50000
-  horizon: 5
+  policy: ['default']  # 'default', or 'full', 'no'
+  n_samples: 1000
+  horizon: 2
 
 figures: 
   path: figures/

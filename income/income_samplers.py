@@ -375,9 +375,11 @@ class CapitalTransition(Sampler):
     Relies on access to columns in sampling:
         ...
     """
-    def __init__(self, sampler, p_stay=0.8, **kwargs):
+    def __init__(self, transformation, sampler=None, p_stay=0.8, **kwargs):
         super().__init__(**kwargs)
 
+
+        self.transf_ = transformation
         self.p_stay = p_stay
         self.sampler = sampler
 
@@ -390,19 +392,29 @@ class CapitalTransition(Sampler):
 
         n = x.shape[0]
         c_curr = [c for c in x.columns if '#prev' not in c]
-        x_curr = x[c_curr]
+
+        # Transform current
+        x_curr = self.transf_.transform(x[c_curr])
         
         y_prev = x['capital-net#prev']
-        
-        
+
+        # Whether to have same capital-net as before
         stay = 1*(np.random.rand(n) < self.p_stay)
+
+        # If you stay and y_prev is non-zero
         stay_on = stay*(y_prev != 0)
-        z = np.random.rand(n) < self.sampler.zero_estimator.predict_proba(x_curr)[:,1]
-        z = 1-stay_on + (1-stay)*z
+
+        # Sample whether zero capital-net if not staying
+        z = 1*(np.random.rand(n) < self.sampler.zero_estimator.predict_proba(x_curr)[:,1])
         
-        y = self.sampler.estimator.predict(x_curr) + np.random.randn(n)*np.sqrt(self.sampler.mse_)*self.sampler.std_mod
+        # Sample new value for the event that not stay
+        y_change = self.sampler.estimator.predict(x_curr) + np.random.randn(n)*np.sqrt(self.sampler.mse_)*self.sampler.std_mod
+
+        # Add noise to previous value if staying on non-zero
+        y_noise = y_prev + np.random.randn(n)*np.sqrt(self.sampler.mse_)*self.sampler.std_mod
         
-        y = (1-z)*y
+        # Change to new value or stay on old with noise
+        y = (1-stay)*(1-z)*y_change + stay_on*y_noise + (1-stay_on)*0 # last term there only to show that if staying off, the cap net is 0
         
         if not self.sampler.bounds is None:
             y = np.clip(y, self.sampler.bounds[0], self.sampler.bounds[1])
@@ -616,6 +628,7 @@ class HoursPerWeekTransition(Sampler):
 
         self.transf_ = transformation
         self.prev_weight = prev_weight
+        # @TODO: Shouldn't be hard-coded
         self.c_feat = ['age', 'education', 'workclass', 'occupation', 'marital-status', 'race', 'relationship', 'sex']
         self.sampler = sampler
 

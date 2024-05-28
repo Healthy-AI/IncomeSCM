@@ -257,7 +257,7 @@ class ZeroOrGaussianRegressionSampler(BaseEstimator, Sampler):
         self.zero_estimator = zero_estimator
         self.estimator = estimator
         self.fitted = False
-        self.round_result = round_result
+        self.round_result = round_result 
         self.bounds = bounds
         self.std_mod = std_mod
         
