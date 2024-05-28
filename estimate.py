@@ -72,10 +72,7 @@ def run_experiment(cfg):
         estimator_type = get_estimator(e)._effect_estimator_type
 
         # Select the appropriate scoring function
-        if estimator_type == 'regression':
-            scoring, refit = get_scoring(estimator_type, c_out)
-        else: 
-            scoring, refit = get_scoring(estimator_type, c_int)
+        scoring, refit = get_scoring(estimator_type, c_int, c_out)
 
         # Create pipeline, with transformation, including the intervention variable
         pipe = get_pipeline(e, c_num, c_cat)

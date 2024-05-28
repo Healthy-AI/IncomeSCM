@@ -25,6 +25,13 @@ data:
 
 estimators: 
 
+  match-nn-eu: 
+    label: 'Matching (NN-Euclidean)'
+    estimator: 'MatchingEstimator'
+    metric: ['euclidean']
+
+backup: 
+
   ipw-lr: 
     label: 'IPWEstimator (LR)'
     estimator: 'IPWEstimator'

@@ -10,6 +10,8 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 
+from scipy.spatial.distance import cdist
+
 import xgboost as xgb
 
 from .scoring import *
@@ -52,19 +54,23 @@ def get_pipeline(estimator, c_num, c_cat):
     return pipe
 
 
-def get_scoring(estimator_type, c_target):
+def get_scoring(estimator_type, c_int, c_out):
     """ Scoring metrics """
     
     if estimator_type == 'regression':
-        scoring = {"R2": make_scorer_df(r2_score, response_method='predict', c_target=c_target), 
-               "RMSE": make_scorer_df(root_mean_squared_error, response_method='predict', c_target=c_target), 
-               "MSE": make_scorer_df(mean_squared_error, response_method='predict', c_target=c_target)}
+        scoring = {"R2": make_scorer_df(r2_score, response_method='predict', c_target=c_out), 
+               "RMSE": make_scorer_df(root_mean_squared_error, response_method='predict', c_target=c_out), 
+               "MSE": make_scorer_df(mean_squared_error, response_method='predict', c_target=c_out)}
         refit = 'R2'
 
     elif estimator_type == 'propensity':
-        scoring = {"AUC": make_scorer_df(roc_auc_score, response_method='predict_proba', c_target=c_target, multi_class='ovr'), 
-               "ACC": make_scorer_df(accuracy_score, response_method='predict', c_target=c_target)}
+        scoring = {"AUC": make_scorer_df(roc_auc_score, response_method='predict_proba', c_target=c_int, multi_class='ovr'), 
+               "ACC": make_scorer_df(accuracy_score, response_method='predict', c_target=c_int)}
         refit = 'AUC'
+    elif estimator_type == 'matching':
+        print('WARNING: Using get_scoring with matching. Currently scores predicted outcomes. ')
+        scoring = {"R2": make_scorer_df(r2_score, response_method='predict', c_target=c_out)}
+        refit = 'R2'
     else:
         raise Exception('Unknown estimator type: %s' % estimator_type)
 
@@ -109,6 +115,9 @@ def get_estimator(e):
 
     elif e in ['IPWEstimator', 'ipw', 'IPW']:
         return IPWEstimator()
+
+    elif e in ['MatchingEstimator', 'matching']:
+        return MatchingEstimator()
 
     else: 
         raise Exception('Unknown estimator %s' % e)
@@ -242,7 +251,72 @@ class IPWEstimator(BaseEstimator, ClassifierMixin):
         return self
 
 
+class MatchingEstimator(CausalEffectEstimator):
+    """ Matching estimator of ATE and potential outcomes """
 
+    _effect_estimator_type = "matching"
+
+    def __init__(self, metric='euclidean', c_int='intervention', c_out='outcome', c_adj=[], v_int0=0, v_int1=1):
+
+        self.metric = metric
+        self.c_int = c_int
+        self.c_out = c_out
+        self.c_adj = c_adj
+        self.v_int0 = v_int0
+        self.v_int1 = v_int1
+        
+    def match_(self, x, t):
+        """
+        """
+        X0 = x[t==0]
+        X1 = x[t==1]
+        n = x.shape[0]
+
+        if self.metric == 'euclidean':
+            C = cdist(X0, X1)
+        else:
+            raise Exception('Unsupported matching metric: %s' % self.metric)
+        
+        I0 = np.where(t==0)[0]
+        I1 = np.where(t==1)[0]
+        
+        J0 = np.argmin(C, axis=1)
+        J1 = np.argmin(C, axis=0)
+        
+        J = np.arange(n)
+        J[t==0] = I1[J0]
+        J[t==1] = I0[J1]
+
+        return J
+
+    def predict(self, x):
+        """ Returns a 0 vector for compatibility """
+
+        return np.zeros(x.shape[0])
+
+    def predict_outcomes(self, x):
+        """ Predicts the potential outcomes given covariates and treatments in x """
+
+        t = 1*(x[self.c_int] == self.v_int1)        
+        y = t*self.y1 + (1-t)*self.y0
+
+        return y
+    
+    def fit(self, x, y=None):
+        """ Fits the matching estimator """
+
+        c_adjs = [c for c in x.columns if c in self.c_adj or c.partition('__')[0] in self.c_adj]
+        t = 1*(x[self.c_int] == self.v_int1)
+        y = x[self.c_out].values
+        z = x[c_adjs]
+    
+        J = self.match_(z, t)
+
+        self.y0 = ((1-t)*y + t*y[J]).mean()
+        self.y1 = (t*y + (1-t)*y[J]).mean()
+        self.ate = self.y1-self.y0
+
+        return self
     
 class S_learner(CausalEffectEstimator):
     """ Implements the S-learner meta learner """ 
@@ -370,18 +444,3 @@ class T_learner(CausalEffectEstimator):
 
         super().set_params(**params)
         return self
-
-
-
-
-""" @TODO: Useful??
-# Construct map of categorical features
-    cout = df_pre.columns
-    cat_map = {}
-    for c in cout:
-        s = c.rsplit('__', maxsplit=1)[0]
-        if s in categorical_features:
-            cat_map[s] = cat_map.get(s, []) + [c]
-
-    return df_pre, preprocessor, cat_map
-"""

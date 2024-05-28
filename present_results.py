@@ -10,6 +10,7 @@ TABLE_LABELS = {
     'ipw-rfc': 'IPW (RF)',
     'ipww-lr': 'IPW-W (LR)',
     'ipww-rfc': 'IPW-W (RF)',
+    'match-nn-eu': 'Match (EU-NN)',
     's-ridge': 'S-learner (Ridge)',
     's-xgbr':  'S-learner (XGB)',
     's-rfr': 'S-learner (RF)',
@@ -73,7 +74,6 @@ def present_results(cfg):
         if (df['estimator']==e).sum()>0:
             r = df[df['estimator']==e].iloc[0]
             log_n_print(f, '%s & %.2f & (%.2f, %.2f)  \\\\' % (l, r['CATE_hpw_R2_r'], r['CATE_hpw_R2_r_l'], r['CATE_hpw_R2_r_u']))
-
 
 
     # TABLE 1
