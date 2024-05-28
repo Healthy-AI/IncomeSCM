@@ -1,5 +1,5 @@
 experiment: 
-  label: v1.T5.minimal
+  label: IncomeSCM-1.0.CATE.minimal
   seed: 0
   outcome: 'income'
   intervention: 'studies'
