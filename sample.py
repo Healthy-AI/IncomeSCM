@@ -44,45 +44,43 @@ def sample(cfg):
             raise Exception('Unknown sampling policy \'%s\'. Aborting.' % pol)
 
         # Sample observations with the same starting seed for all policies (counterfactuals)
-        np.random.seed(cfg.samples.seed)
-        print('Sampling observations ...')
-        S = A.sample(cfg.samples.n_samples, T=(cfg.samples.horizon+1)) # Adding 1 since throwing away first time step
+        seeds = cfg.samples.seed
+        if not type(seeds) == list:
+            seeds = [seeds]
+        
+        for seed in seeds:
+            np.random.seed(seed)
+            print('Sampling observations with seed S=%d...' % seed)
+            S = A.sample(cfg.samples.n_samples, T=(cfg.samples.horizon+1)) # Adding 1 since throwing away first time step
 
-        # Prep data
-        df0 = S[S['time']==0] # To generate income without studies
-        df1 = S[S['time']==1] # To generate all the other variables, and the studies indicator
-        df = df1.copy().rename(columns={'income': 'income_prev'})
-        df['income_prev'] = df0['income'].values
-        df['studies_prev'] = df0['studies'].values
-        
-        # Possible solutions to studies_prev being a confounder. Trying #4 first
-        #
-        # 1. Go back to not having current income among the covariates
-        # 2. Make StudiesTransition not depend on previous studies at the time of intervention
-        # 3. Create a separate income variable for the first time step that doesn't depend on studies
-        # 4. Add studies_prev to the adjustment set
-        
-        # Get the income from the last time point as the outcome variable
-        Tend = cfg.samples.horizon-1
-        df['income'] = S[S['time']==Tend]['income'].values
-        
-        # Make categorical columns have the right type
-        c_cols = ['native-country', 'sex', 'race', 'education', 
-                'studies', 'workclass', 'occupation', 'marital-status', 'relationship', 'studies_prev']
-        df[c_cols] = df[c_cols].astype('category')
+            # Prep data
+            df0 = S[S['time']==0] # To generate income without studies
+            df1 = S[S['time']==1] # To generate all the other variables, and the studies indicator
+            df = df1.copy().rename(columns={'income': 'income_prev'})
+            df['income_prev'] = df0['income'].values
+            df['studies_prev'] = df0['studies'].values
+            
+            # Get the income from the last time point as the outcome variable
+            Tend = cfg.samples.horizon-1
+            df['income'] = S[S['time']==Tend]['income'].values
+            
+            # Make categorical columns have the right type
+            c_cols = ['native-country', 'sex', 'race', 'education', 
+                    'studies', 'workclass', 'occupation', 'marital-status', 'relationship', 'studies_prev']
+            df[c_cols] = df[c_cols].astype('category')
 
-        # Drop index columns
-        df = df.drop(columns=['time','id'])
-        
-        # Reorder columns
-        special_cols = ['studies', 'income']
-        df = df[[c for c in df.columns if c not in special_cols] + special_cols]
-        
-        # Save data to file
-        fname = '%s_%s_n%d_T%d_s%d.pkl' % (cfg.samples.label, pol, cfg.samples.n_samples, cfg.samples.horizon, cfg.samples.seed)
-        fpath = os.path.join(cfg.samples.path, fname)
-        df.to_pickle(fpath)
-        print('Saved result to: %s' % fpath)
+            # Drop index columns
+            df = df.drop(columns=['time','id'])
+            
+            # Reorder columns
+            special_cols = ['studies', 'income']
+            df = df[[c for c in df.columns if c not in special_cols] + special_cols]
+            
+            # Save data to file
+            fname = '%s_%s_n%d_T%d_s%d.pkl' % (cfg.samples.label, pol, cfg.samples.n_samples, cfg.samples.horizon, seed)
+            fpath = os.path.join(cfg.samples.path, fname)
+            df.to_pickle(fpath)
+            print('Saved result to: %s' % fpath)
 
 
 if __name__ == "__main__":

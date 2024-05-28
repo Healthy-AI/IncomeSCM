@@ -14,7 +14,7 @@ simulator:
 
 samples:
   label: IncomeSCM-1.0
-  seed: 1
+  seed: [0,1]
   path: samples/
   policy: ['default', 'full', 'no']  # 'default', or 'full', 'no'
   n_samples: 50000
