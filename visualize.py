@@ -114,7 +114,7 @@ if __name__ == "__main__":
     
     # Parse arguments
     parser = argparse.ArgumentParser(description='Visualize IncomeSim samples')
-    parser.add_argument('-c', '--config', type=str, dest='config', help='Path to config file', default='configs/config_v1.yml')
+    parser.add_argument('-c', '--config', type=str, dest='config', help='Path to config file', default='configs/simulator.yml')
     args = parser.parse_args()
 
     # Load config file
