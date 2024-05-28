@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 
 from sklearn.linear_model import LinearRegression, Ridge, LogisticRegression
+from sklearn.neural_network import MLPRegressor
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 
 from .util import *
@@ -45,8 +46,8 @@ class StudiesSampler(Sampler):
         # Overall, no studies and full-time studies most common. Evening courses less
         if self.intervention is None: 
 
-            c_const = np.array([[7., -5., -3.5,  2.]])
-            c_age   = np.array([[2., 1., 0., -.3]])
+            c_const = np.array([[7., -5., -3.5,  3.]])
+            c_age   = np.array([[2., 1., 0., -.5]])
             
             c_own_child  = np.array([[3., 0., 0., -10]])
             
@@ -144,14 +145,15 @@ class StudiesTransition(Sampler):
             ongoing = ['11th','9th','Some-college','Assoc-acdm','7th-8th',
                     'Assoc-voc','5th-6th','10th','Preschool','12th','1st-4th']
             
-            p = p + 2*((x['studies#prev'] == 'Full-time studies')&(x['education'].isin(ongoing))) \
+            # Make it more likely to continue studies if started
+            p = p + 4*((x['studies#prev'] == 'Full-time studies')&(x['education'].isin(ongoing))) \
                         .values.reshape([-1, 1])*np.array([[0, 0, 0, 1]])*p
             
             # Make it unlikely to start full-time studies from nothing
-            p = p - 0.7*(x['studies#prev'] != 'Full-time studies').values.reshape([-1, 1])*np.array([[0, 0, 0, 1]])*p
+            p = p - 0.95*(x['studies#prev'] != 'Full-time studies').values.reshape([-1, 1])*np.array([[0, 0, 0, 1]])*p
 
             # Make it unlikely to start full-time studies or day course if income is already reasonably high
-            p = p - 0.7*(x['income#prev'] > 50000).values.reshape([-1, 1])*np.array([[0, 0, 0.7, 1]])*p
+            p = p - 0.8*(x['income#prev'] > 50000).values.reshape([-1, 1])*np.array([[0, 0, 0.7, 1]])*p
             
             # Make full-time studies impossible if doctorate
             p = p - 1.*(x['education'] == 'Doctorate').values.reshape([-1, 1])*np.array([[0, 0, 0, 1]])*p
@@ -287,7 +289,8 @@ class IncomeSampler(Sampler):
     def fit(self, x, y):     
 
         cols = [c for c in x.columns if 'studies_' not in c]
-        self.model_ = RandomForestRegressor(n_estimators=10, min_samples_leaf=50).fit(x[cols],y)
+        self.model_ = RandomForestRegressor(n_estimators=100, min_samples_leaf=20).fit(x[cols],y)
+        #self.model_ = Ridge(alpha=1).fit(x[cols],y)
         
         yp = self.model_.predict(x[cols])
         self.brier_ = mean_squared_error(y, yp)
@@ -319,9 +322,8 @@ class IncomeSampler(Sampler):
         
         yp[x['workclass_Without-pay']==1] = 0
         
-        
         yp = np.round(yp)
-        
+
         return yp
     
 class IncomeTransition(Sampler):
@@ -329,7 +331,7 @@ class IncomeTransition(Sampler):
     Relies on access to columns in sampling:
         ...
     """
-    def __init__(self, sampler, prev_weight=0.95, max_raise_frac=0.04, **kwargs):
+    def __init__(self, sampler, prev_weight=0.95, max_raise_frac=0.05, **kwargs):
         super().__init__(**kwargs)
     
         self.prev_weight = prev_weight
@@ -351,13 +353,17 @@ class IncomeTransition(Sampler):
         # This column is assumed not to be affected by transformers
         y_prev = x['income#prev']
         
-        # If switching between full-time studies and not, don't look at previous income
-        prev_weight = self.prev_weight*(x['studies#prev_Full-time studies'] == x['studies_Full-time studies'])
-            
+        # If previously engaging in full-time studies, don't look at previous income
+        prev_weight = self.prev_weight*(x['studies#prev_Full-time studies']==x['studies_Full-time studies'])
+        # If previously without pay, don't look at previous income
+        prev_weight = prev_weight*(x['workclass_Without-pay']==0)
+        # If previously income was <5000, don't look at previous income
+        prev_weight = prev_weight*(y_prev >= 5000)
+
+        # New salary (to account for job switches)
         y_new = self.sampler.sample(x_curr)
-        #y_new += x['studies#prev_Full-time studies']*(np.random.rand(n)*2000) # No bonus for moving from full-time studies?
-        y_new += x['studies#prev_Day course']*(np.random.rand(n)*1000)
-        y_new += x['studies#prev_Evening course']*(np.random.rand(n)*100)
+        y_new += (y_new>0)*x['studies#prev_Day course']*(np.random.rand(n)*1000)
+        y_new += (y_new>0)*x['studies#prev_Evening course']*(np.random.rand(n)*100)
 
         # Add a random yearly raise to the previous year's salary
         raise_factor = 1+(np.random.rand(n)*self.max_raise_frac)
@@ -462,7 +468,7 @@ class EducationTransition(Sampler):
         rev_map = dict([(v,k) for k,v in EDUC_MAP.items()])
        
         # Transitions based on studies
-        p = 0.9*(x['studies#prev_Full-time studies']==1) + 0.05*(x['studies#prev_Evening course']==1)
+        p = 0.95*(x['studies#prev_Full-time studies']==1) + 0.05*(x['studies#prev_Evening course']==1) + 0.1*(x['studies#prev_Day course']==1)
         trans = np.random.rand(p.shape[0]) < p
         
         educ_new = np.clip(educ_num + trans, 1, 16)
@@ -497,11 +503,21 @@ class WorkclassTransition(Sampler):
         
     def sample(self, x):
         
-        x = x['workclass#prev']
-        n = x.shape[0]
-        stay = np.random.rand(n) < self.p_stay
+        y_prev = x['workclass#prev']
+        n = y_prev.shape[0]
+        
+        stay = 1*(np.random.rand(n) < self.p_stay)
+
+        # Don't stay without pay
+        stay = stay*(y_prev != 'Without-pay')
+
         x_move = pd.Series(np.random.choice(self.labels_, size=n, p=self.p_))
-        y = stay*x.values + (~stay)*x_move.values
+
+        y = stay*y_prev.values + (1-stay)*x_move.values
+
+        # Without pay if studying full-time
+        studying = (x['studies#prev'] == 'Full-time studies')
+        y[studying] = 'Without-pay'
         
         return y
     
@@ -555,8 +571,9 @@ class MaritalStatusTransition(Sampler):
                 MS[l] = 0
         MS = MS[self.labels].values
         
+        # Decrease probability of marrying if during full-time studies and not previously marreid
         study = 1*((x['studies#prev']=='Full-time studies')&(x['marital-status#prev']=='Never-married')).values.reshape(-1,1)
-        study_factor = np.ones((n,len(M.classes_))) + study*np.array([[2, 0.5, 1, 1, 1]]*n)
+        study_factor = np.ones((n,len(M.classes_))) + study*np.array([[3, 0.2, 1, 1, 1]]*n)
                                
         p_age_study = p_age*study_factor
         p_age_study = p_age_study/p_age_study.sum(axis=1, keepdims=True)              
@@ -628,7 +645,7 @@ class HoursPerWeekTransition(Sampler):
 
         self.transf_ = transformation
         self.prev_weight = prev_weight
-        # @TODO: Shouldn't be hard-coded
+        # @TODO: Shouldn't be hard-coded here
         self.c_feat = ['age', 'education', 'workclass', 'occupation', 'marital-status', 'race', 'relationship', 'sex']
         self.sampler = sampler
 
@@ -665,6 +682,8 @@ class OccupationTransition(Sampler):
 
         n = x.shape[0]
         p_stay = np.ones(n)*self.p_stay
+
+        # More likely to switch jobs if finishing full-time studies
         p_stay[x['studies#prev_Full-time studies'].astype(int)] /= 4
         
         stay = 1*(np.random.rand(n) < p_stay)

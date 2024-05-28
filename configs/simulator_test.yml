@@ -14,11 +14,11 @@ simulator:
 
 samples:
   label: IncomeSCM-1.0.test
-  seed: [0]
+  seed: [1]
   path: samples/
-  policy: ['default']  # 'default', or 'full', 'no'
+  policy: ['full','no']  # 'default', or 'full', 'no'
   n_samples: 1000
-  horizon: 2
+  horizon: 7
 
 figures: 
   path: figures/
@@ -94,7 +94,7 @@ variables:
       type: LogisticSampler
       multi_class: multinomial
     transform_input: True
-    seq_parents_prev: [workclass]
+    seq_parents_prev: [workclass, studies]
     seq_sampler: 
       type: WorkclassTransition
       p_stay: 0.95
@@ -198,6 +198,6 @@ variables:
       type: IncomeTransition
       sampler: '#init_sampler'
       prev_weight: 0.95
-      self.max_raise_frac: 0.04
+      self.max_raise_frac: 0.05
     seq_transform_input: True
     seq_fit: False

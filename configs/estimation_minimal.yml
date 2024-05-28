@@ -18,9 +18,9 @@ selection:
 data: 
   label: income
   path: samples/
-  observational: IncomeSCM-1.0_default_n50000_T5_s0.pkl
-  control: IncomeSCM-1.0_no_n50000_T5_s1.pkl 
-  target: IncomeSCM-1.0_full_n50000_T5_s1.pkl
+  observational: IncomeSCM-1.0_default_n50000_T7_s0.pkl
+  control: IncomeSCM-1.0_no_n50000_T7_s1.pkl 
+  target: IncomeSCM-1.0_full_n50000_T7_s1.pkl
 
 estimators: 
 

@@ -19,37 +19,37 @@ TABLE_LABELS = {
     't-rfr': 'T-learner (RF)'
 }
 
-def present_results(cfg):
+def present_results(sim_cfg, est_cfg):
     """ Estimate the causal effect of interventions and evaluate the results
     """
 
     # Parse estimators and set up parameter grids
     estimators = {}
-    est = cfg.estimators.__dict__
+    est = est_cfg.estimators.__dict__
 
-    results_dir = os.path.join(cfg.results.base_path, cfg.experiment.label)
+    results_dir = os.path.join(est_cfg.results.base_path, est_cfg.experiment.label)
 
     df = pd.DataFrame({})
     for e in est.keys():
-        cv_path = os.path.join(results_dir, '%s.%s.cv_results.csv' % (cfg.experiment.label, e))
+        cv_path = os.path.join(results_dir, '%s.%s.cv_results.csv' % (est_cfg.experiment.label, e))
         R = pd.DataFrame({})
         if os.path.isfile(cv_path):
             R = pd.read_csv(cv_path, index_col=0)
             R = R.groupby(['experiment', 'estimator', 'best_params'], as_index=False).mean().drop(columns=['fold', 'best_params'])
 
-        ope_path = os.path.join(results_dir, '%s.%s.ope_results.csv' % (cfg.experiment.label, e))
+        ope_path = os.path.join(results_dir, '%s.%s.ope_results.csv' % (est_cfg.experiment.label, e))
         if os.path.isfile(ope_path):
             Rope = pd.read_csv(ope_path, index_col=0)
             R = pd.merge(R, Rope, on=['experiment', 'estimator'])
 
-        hpw_path = os.path.join(results_dir, '%s.%s.hpw_results.csv' % (cfg.experiment.label, e))
+        hpw_path = os.path.join(results_dir, '%s.%s.hpw_results.csv' % (est_cfg.experiment.label, e))
         if os.path.isfile(hpw_path):
             Rhpw = pd.read_csv(hpw_path, index_col=0)
             R = pd.merge(R, Rhpw, on=['experiment', 'estimator'])
 
         df = pd.concat([df, R], axis=0)
     
-    r_path = os.path.join(results_dir, '%s.results.csv' % (cfg.experiment.label))
+    r_path = os.path.join(results_dir, '%s.results.csv' % (est_cfg.experiment.label))
     df.to_csv(r_path)
 
 
@@ -57,7 +57,7 @@ def present_results(cfg):
         f.write(s+'\n')
         print(s)
 
-    f = open('paper_results.%s.tex' % cfg.experiment.label, 'w')
+    f = open('paper_results.%s.tex' % est_cfg.experiment.label, 'w')
     
     log_n_print(f, '# CATE AND FITTING RESULTS')
     for e, l in TABLE_LABELS.items(): 
@@ -78,10 +78,10 @@ def present_results(cfg):
 
     # TABLE 1
     # Load data
-    D_tr, c_cat, c_num, c_out, c_features = load_income_data(cfg.data.path, download=False)
+    D_tr, c_cat, c_num, c_out, c_features = load_income_data(sim_cfg.data.path, download=False)
     D_tr = D_tr.drop(columns=['income', 'studies'])
 
-    D_s = pd.read_pickle(cfg.data.observational)
+    D_s = pd.read_pickle(os.path.join(est_cfg.data.path, est_cfg.data.observational))
     D_s['income>50k'] = ((D_s['income_prev']>50000).astype(str)).astype('category')
     D_tr['income>50k'] = (D_tr['income>50k']>0).astype(str).astype('category')
 
@@ -122,14 +122,16 @@ if __name__ == "__main__":
     
     # Parse arguments
     parser = argparse.ArgumentParser(description='Present reuslts from IncomeSim runs')
-    parser.add_argument('-c', '--config', type=str, dest='config', help='Path to config file', default='configs/estimation.yml')
+    parser.add_argument('-ec', '--sim_config', type=str, dest='sim_config', help='Path to estimation config file', default='configs/simulator.yml')
+    parser.add_argument('-sc', '--est_config', type=str, dest='est_config', help='Path to simulator config file', default='configs/estimation.yml')
     args = parser.parse_args()
 
     # Load config file
-    cfg = load_config(args.config)
+    sim_cfg = load_config(args.sim_config)
+    est_cfg = load_config(args.est_config)
 
     # Fit simulator
-    present_results(cfg)
+    present_results(sim_cfg, est_cfg)
     
 
     

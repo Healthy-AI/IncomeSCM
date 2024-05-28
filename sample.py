@@ -51,7 +51,13 @@ def sample(cfg):
         for seed in seeds:
             np.random.seed(seed)
             print('Sampling observations with seed S=%d...' % seed)
-            S = A.sample(cfg.samples.n_samples, T=(cfg.samples.horizon+1)) # Adding 1 since throwing away first time step
+            S = A.sample(cfg.samples.n_samples, T=cfg.samples.horizon) # Adding 1 since throwing away first time step
+
+            # Save the time series
+            fname = '%s_%s_series_n%d_T%d_s%d.pkl' % (cfg.samples.label, pol, cfg.samples.n_samples, cfg.samples.horizon, seed)
+            fpath = os.path.join(cfg.samples.path, fname)
+            S.to_pickle(fpath)
+            print('Saved series to: %s' % fpath)
 
             # Prep data
             df0 = S[S['time']==0] # To generate income without studies

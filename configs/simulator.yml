@@ -18,7 +18,7 @@ samples:
   path: samples/
   policy: ['default', 'full', 'no']  # 'default', or 'full', 'no'
   n_samples: 50000
-  horizon: 5
+  horizon: 7
 
 figures: 
   path: figures/
@@ -94,7 +94,7 @@ variables:
       type: LogisticSampler
       multi_class: multinomial
     transform_input: True
-    seq_parents_prev: [workclass]
+    seq_parents_prev: [workclass, studies]
     seq_sampler: 
       type: WorkclassTransition
       p_stay: 0.95

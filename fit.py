@@ -23,7 +23,13 @@ def fit_simulator(cfg):
     T = SubsetTransformer()
     D_prev = D_tr.copy().rename(columns=dict([(c,c+'#prev') for c in D_tr.columns if not c == 'id']))
     D_tran = pd.merge(D_tr, D_prev, on='id')    
-    D_tran['income#prev'] = np.random.randn(D_tran.shape[0])    # Ensure that we avoid transforming income#prev
+
+    # @TODO: Hack to ensure that we avoid transforming income#prev. Replace.
+    D_tran['income#prev'] = np.random.randn(D_tran.shape[0])    
+    D_tran['income#prev'] = D_tran['income#prev'] - D_tran['income#prev'].mean()
+    D_tran['income#prev'] = D_tran['income#prev'] / D_tran['income#prev'].std()
+    
+    # Fit the transformer
     T.fit(D_tran)
     
     # Create ARM model
