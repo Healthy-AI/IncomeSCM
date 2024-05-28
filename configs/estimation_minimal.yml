@@ -1,7 +1,6 @@
 experiment: 
   label: v1.T5.minimal
   seed: 0
-  target: CATE # ATE / OPE #@TODO: Not used
   outcome: 'income'
   intervention: 'studies'
   intervention0: 'No studies'
@@ -19,9 +18,9 @@ selection:
 data: 
   label: income
   path: samples/
-  observational: income_scm.v1_default_n50000_T5_s0.pkl
-  control: income_scm.v1_no_n50000_T5_s1.pkl # Should have a different seed than the observational! # Can be specified as None if the target is OPE
-  target: income_scm.v1_full_n50000_T5_s1.pkl
+  observational: IncomeSCM-1.0_default_n50000_T5_s0.pkl
+  control: IncomeSCM-1.0_no_n50000_T5_s1.pkl 
+  target: IncomeSCM-1.0_full_n50000_T5_s1.pkl
 
 estimators: 
 
@@ -29,8 +28,6 @@ estimators:
     label: 'Matching (NN-Euclidean)'
     estimator: 'MatchingEstimator'
     metric: ['euclidean']
-
-backup: 
 
   ipw-lr: 
     label: 'IPWEstimator (LR)'
