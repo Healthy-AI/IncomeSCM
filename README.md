@@ -158,7 +158,7 @@ When citing the data set, please use
 ```
 python fit.py [-c CONFIG_FILE]
 ```
-* The default config file is configs/config_v1.yml
+* The default config file is configs/simulator.yml
 * To sample from the simulator, use the script ```sample.py```
 ```
 python sample.py [-c CONFIG_FILE]
