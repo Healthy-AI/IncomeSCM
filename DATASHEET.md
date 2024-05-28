@@ -198,11 +198,11 @@ The dataset will be freely available for public download.
 
 ### How will the dataset  be distributed (e.g., tarball on website, API, GitHub)?
 
-Our dataset is hosted on the HealthyAI github organization and on healthyai.se. @TODO: Enter URLs to the data set!
+Our dataset is hosted on the HealthyAI github organization at https://github.com/Healthy-AI/IncomeSCM and on healthyai.se.
 
 ### When will the dataset be distributed?
 
-An early version of the dataset has been distributed as of June, 2023. The IncomeSCM-1.0.CATE release has been available since June 7, 2024. 
+An early version of the dataset has been distributed as of June, 2023. The IncomeSCM-1.0.CATE release has been available since May 28, 2024. 
 
 ### Will the dataset be distributed under a copyright or other intellectual property (IP) license, and/or under applicable terms of use (ToU)?
 
