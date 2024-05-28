@@ -87,7 +87,6 @@ def get_estimator(e):
 
     if type(e) != str:
         raise Exception('Unknown estimator specification: %s' % str(e)) 
-        #@TODO: Should support a class and instance of estimator
 
     if e in ['LinearRegression', 'ols']:
         return LinearRegression()
@@ -391,9 +390,6 @@ class T_learner(CausalEffectEstimator):
         
     def fit(self, x, y=None):
         """ Fits the base estimators """
-        
-        # @TODO: Could do the dicotomization here instead?
-        # @TODO: For splitting keys if needed: key, delim, sub_key = key.partition("__")
 
         c_adjs = [c for c in x.columns if c in self.c_adj or c.partition('__')[0] in self.c_adj]
 

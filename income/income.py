@@ -68,7 +68,7 @@ def init_income_ARM(T):
                    seq_parents_prev=['marital-status', 'studies'], seq_parents_curr=['age'], 
                    seq_sampler=MaritalStatusTransition(a_stay=5))
 
-    # @TODO: Make dependent on short-term study too
+    # @TODO: Could make dependent on short-term study too
     occupation_sampler = LogisticSampler(multi_class='multinomial')
     A.add_variable('occupation', ['age', 'education', 'workclass', 'race', 'sex'], 
                    occupation_sampler, transform_input=True, seq_transform_input = True,
@@ -105,7 +105,7 @@ def init_income_ARM(T):
 
     c_income_feat = ['hours-per-week', 'age', 'education', 'workclass', 'marital-status', 'occupation', 'race', 'sex', 'capital-net', 'studies']
     
-    # @TODO: Make dependent on short-term study too
+    # @TODO: Could make dependent on short-term study too
     income_sampler = IncomeSampler()
     A.add_variable('income', c_income_feat, income_sampler, 
                    seq_sampler=IncomeTransition(income_sampler, prev_weight=0.95, max_raise_frac=0.04), 

@@ -348,7 +348,7 @@ class IncomeTransition(Sampler):
         c_curr = [c for c in x.columns if '#prev' not in c]
         x_curr = x[c_curr]
         
-        # @TODO: Make sure this one is not transformed (not standard scaled)
+        # This column is assumed not to be affected by transformers
         y_prev = x['income#prev']
         
         # If switching between full-time studies and not, don't look at previous income

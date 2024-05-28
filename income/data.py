@@ -78,10 +78,7 @@ def load_income_data(folder='data/adult/', data_only=False, download=True):
     # Feature columns
     c_features = [c for c in list(D_tr.columns) if c not in ['income>50k', c_out]]
 
-    # Construct map between education-num and education
-    # educ_map = dict(D_tr[['education', 'education-num']].groupby('education', as_index=False).mean().sort_values('education-num').values)
-    # @TODO: No longer used. Hard-coded in income_samplers.py instead
-
+    # Add studies variable
     c_cat += ['studies']
     L_studies = StudiesSampler.classes_
     D_tr['studies'] = (L_studies*int(np.ceil(D_tr.shape[0]/len(L_studies))))[:D_tr.shape[0]]

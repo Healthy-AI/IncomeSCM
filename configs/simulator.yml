@@ -113,7 +113,7 @@ variables:
       a_stay: 5
     seq_transform_input: False 
 
-  # @TODO: Make dependent on short-term study too
+  # @TODO: Could make dependent on short-term study too
   occupation:
     parents: [age, education, workclass, race, sex, native-country]
     sampler: 
