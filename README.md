@@ -130,7 +130,7 @@ When citing the data set, please use
       year={2024},
       eprint={2405.16069},
       archivePrefix={arXiv},
-      primaryClass={cs.LG}
+      primaryClass={cs.LG},
       url="\url{https://github.com/Healthy-AI/IncomeSCM}",
 }
 ```
