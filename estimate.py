@@ -66,7 +66,10 @@ def run_experiment(cfg):
     ope_results = {}
 
     for i, v in estimators.items(): 
+        
         label = v['label']
+        print('Fitting estimator: %s...' % label)
+        
         e = v['estimator']
         param_grid = v['param_grid']
         estimator_type = get_estimator(e)._effect_estimator_type

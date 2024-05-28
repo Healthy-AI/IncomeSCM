@@ -43,11 +43,11 @@ def sample(cfg):
         else:
             raise Exception('Unknown sampling policy \'%s\'. Aborting.' % pol)
 
-        # Sample observations with the same starting seed for all policies (counterfactuals)
         seeds = cfg.samples.seed
         if not type(seeds) == list:
             seeds = [seeds]
         
+        # Sample observations with the same starting seed(s) for all policies (counterfactuals)
         for seed in seeds:
             np.random.seed(seed)
             print('Sampling observations with seed S=%d...' % seed)
