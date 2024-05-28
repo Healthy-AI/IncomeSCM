@@ -125,10 +125,13 @@ When citing the data set, please use
 
 ```bibtex
 @misc{johansson2024incomescm,
-  title={IncomeSCM: From tabular data set to time-series simulator and causal estimation benchmark},
-  author={Johansson, Fredrik D.},
-  year={2024},
-  howpublished="\url{https://github.com/Healthy-AI/IncomeSCM}",
+      title={IncomeSCM: From tabular data set to time-series simulator and causal estimation benchmark}, 
+      author={Fredrik D. Johansson},
+      year={2024},
+      eprint={2405.16069},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+      url="\url{https://github.com/Healthy-AI/IncomeSCM}",
 }
 ```
 
