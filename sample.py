@@ -86,13 +86,13 @@ def sample(cfg):
             fname = '%s_%s_n%d_T%d_s%d.pkl' % (cfg.samples.label, pol, cfg.samples.n_samples, cfg.samples.horizon, seed)
             fpath = os.path.join(cfg.samples.path, fname)
             df.to_pickle(fpath)
+            print('Saved result to: %s' % fpath)
 
             if cfg.samples.csv: 
                 fname = '%s_%s_n%d_T%d_s%d.csv' % (cfg.samples.label, pol, cfg.samples.n_samples, cfg.samples.horizon, seed)
                 fpath = os.path.join(cfg.samples.path, fname)
-                df.to_csv(fname)
-
-            print('Saved result to: %s' % fpath)
+                df.to_csv(fpath)
+                print('Saved result to: %s' % fpath)
 
 
 if __name__ == "__main__":
