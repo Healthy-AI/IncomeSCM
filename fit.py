@@ -39,7 +39,9 @@ def fit_simulator(cfg):
     # Fit to observed data 
     warnings.filterwarnings("ignore", category=ConvergenceWarning)
     print('Fitting ARM model (suppressing warnings) ...')
-    A.fit(D_tr)
+
+    log_file = os.path.join(cfg.simulator.path, '%s.log.txt' % cfg.simulator.label)
+    A.fit(D_tr, log_file=log_file)
 
     # Save the simulator
     save_model(A, cfg.simulator.path, cfg.simulator.label)

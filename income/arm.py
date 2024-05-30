@@ -5,14 +5,15 @@ from sklearn.base import BaseEstimator
 
 from .util import *
 from .samplers import *
+from .income_samplers import *
 
 def sampler_score(estimator):
-    if type(estimator) in [LogisticSampler, RandomForestClassifierSampler]:
-        return estimator.auc_
+    if type(estimator) in [LogisticSampler, RandomForestClassifierSampler, IncomeSampler]:
+        return 'AUC', estimator.auc_
     elif type(estimator) in [LinearGaussianSampler, GaussianRegressionSampler, GaussianRandomForestSampler, ZeroOrGaussianRegressionSampler]:
-        return estimator.r2_
+        return 'R2', estimator.r2_
     else:
-        return None
+        return None, None
 
 class MarkovARM():
     """
@@ -147,9 +148,12 @@ class MarkovARM():
         return L
         
         
-    def fit(self, df):
+    def fit(self, df, log_file=None):
         if len(self.vars_) == 0:
             raise Exception('At least one variable must be added before fitting')    
+
+        f = None
+        if not log_file is None: f = open(log_file, 'w')
             
         for k, v in self.vars_.items():
             Mv = self.get_sampler(v.sampler)
@@ -157,7 +161,7 @@ class MarkovARM():
             if isinstance(Mv, Sampler):
                 z = df[[v.name]+v.parents].dropna()
 
-                print('Fitting variable %s' % k)
+                log_n_print(f, 'Fitting variable %s' % k)
                 if len(v.parents) < 1:
                     Mv.fit(z[v.name])                    
                 else:
@@ -165,14 +169,15 @@ class MarkovARM():
                         Mv.fit(self.transf_.transform(z[v.parents]), z[v.name])
                     else:
                         Mv.fit(z[v.parents], z[v.name])
-                    _score = sampler_score(Mv)
+                    _sfun, _score = sampler_score(Mv)
                     if not _score is None:
-                        print('In-sample fitting score: %.4f' % _score)
+                        log_n_print(f, '  In-sample fitting score: %.4f (%s)' % (_score, _sfun))
 
             self.samplers_[k] = Mv 
             
             # Fit sequential samplers
             if self.seq_data:
+                if not f is None: f.close()
                 raise Exception('Fitting to sequential data not implemented yet')
             else:
                 Mv_seq = self.get_sampler(v.seq_sampler)
@@ -189,6 +194,8 @@ class MarkovARM():
                         Mv_seq.fit(z[seq_parents], z[v.name])
                     
                 self.seq_samplers_[k] = Mv_seq
+
+        if not f is None: f.close()
             
         self.fitted = True
                 
@@ -209,7 +216,6 @@ class MarkovARM():
         self.sample_times_ = {}
         for k in O:
             v = self.vars_[k] 
-            #print('Sampling %s...' % k)
             
             t0 = time.time()
             if len(v.parents) < 1:

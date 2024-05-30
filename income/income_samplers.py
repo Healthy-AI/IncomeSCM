@@ -4,6 +4,7 @@ import numpy as np
 from sklearn.linear_model import LinearRegression, Ridge, LogisticRegression
 from sklearn.neural_network import MLPRegressor
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
+from sklearn.metrics import mean_squared_error, roc_auc_score
 
 from .util import *
 from .samplers import *
@@ -290,10 +291,10 @@ class IncomeSampler(Sampler):
 
         cols = [c for c in x.columns if 'studies_' not in c]
         self.model_ = RandomForestRegressor(n_estimators=100, min_samples_leaf=20).fit(x[cols],y)
-        #self.model_ = Ridge(alpha=1).fit(x[cols],y)
         
         yp = self.model_.predict(x[cols])
         self.brier_ = mean_squared_error(y, yp)
+        self.auc_ = roc_auc_score(y, yp)
         
         self.sample(x, update_params=True)
         

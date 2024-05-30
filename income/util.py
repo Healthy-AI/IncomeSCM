@@ -48,6 +48,11 @@ def load_model(path, label):
     else: 
         return None
 
+def log_n_print(f, s):
+    if not f is None:
+        f.write(s+'\n')
+    print(s)
+
 
 class SubsetTransformer(TransformerMixin):
     def __init__(self):

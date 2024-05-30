@@ -54,12 +54,7 @@ def present_results(sim_cfg, est_cfg):
     r_path = os.path.join(results_dir, '%s.results.csv' % (est_cfg.experiment.label))
     df.to_csv(r_path)
 
-
-    def log_n_print(f, s):
-        f.write(s+'\n')
-        print(s)
-
-    f = open('paper_results.%s.tex' % est_cfg.experiment.label, 'w')
+    f = open(os.path.join(results_dir, '%s.table_results.tex' % est_cfg.experiment.label), 'w')
     
     log_n_print(f, '# CATE AND FITTING RESULTS')
     for e, l in TABLE_LABELS.items(): 
@@ -131,8 +126,8 @@ if __name__ == "__main__":
     
     # Parse arguments
     parser = argparse.ArgumentParser(description='Present reuslts from IncomeSim runs')
-    parser.add_argument('-ec', '--sim_config', type=str, dest='sim_config', help='Path to estimation config file', default='configs/simulator.yml')
-    parser.add_argument('-sc', '--est_config', type=str, dest='est_config', help='Path to simulator config file', default='configs/estimation.yml')
+    parser.add_argument('-sc', '--sim_config', type=str, dest='sim_config', help='Path to estimation config file', default='configs/simulator.yml')
+    parser.add_argument('-ec', '--est_config', type=str, dest='est_config', help='Path to simulator config file', default='configs/estimation.yml')
     args = parser.parse_args()
 
     # Load config file
