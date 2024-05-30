@@ -32,6 +32,10 @@ python estimate.py -c configs/estimation_minimal.yml
 python evaluate.py -c configs/estimation_minimal.yml
 python present_results.py -c configs/estimation_minimal.yml
 ```
+or run the shellscript 
+```
+./replicate.sh
+```
 
 ## Using the CATE estimation data set (IncomeSCM-1.0.CATE)
 
@@ -79,7 +83,7 @@ $$\mathrm{CATE}(z) = \mathbb{E}[\Delta \mid Z=z]$$
 where $Z \subseteq X$ is a given set of covariates. For this, we consider three main conditioning sets: 
 1. $Z$ is the set of all pre-intervention covariates
 2. $Z$ is the set of direct causes of $A$
-3. $Z$ is limited to ```hours-per-week```$_1$ (not a valid adjustment set)
+3. $Z$ is limited to ```education-num``` (not a valid adjustment set)
 
 In addition, we seek to estimate the average treatment effect (ATE), $$\mathrm{ATE} = \mathbb{E}[\Delta]$$ using the first two conditioning sets above for adjustment. 
 
@@ -96,7 +100,7 @@ The main data set is stored as Pandas dataframes saved in Pickle (.pkl) files:
   * ```IncomeSCM-1.0.CATE_default.pkl``` (V1 simulator, default policy ($A$ observational), 50 000 samples, horizon T=5, seed=0)
   * ```IncomeSCM-1.0.CATE_no.pkl``` (V1 simulator, "No studies" policy ($A \leftarrow 0$), 50 000 samples, horizon T=5, seed=1)
   * ```IncomeSCM-1.0.CATE_full.pkl``` (V1 simulator, "Full-time studies" policy ($A \leftarrow 1$), 50 000 samples, horizon T=5, seed=1)
-  * All three files are contained in [IncomeSCM-1.0.CATE.zip](samples/IncomeSCM-1.0.CATE.zip)
+  * All three files are contained in [IncomeSCM-1.0.CATE.zip](./samples/IncomeSCM-1.0.CATE.zip)
 
 The data set can be loaded into Python using Pandas ```pd.read_pickle(...)```
 
@@ -135,7 +139,7 @@ A real fitting and evaluation example is given in ```estimate.py```
 
 When citing the data set, please use
 
-```Johansson, F. D. (2024). IncomeSCM: From tabular data set to time-series simulator and causal estimation benchmark. https://github.com/Healthy-AI/IncomeSCM/, 2024```
+```Johansson, F. D. (2024). IncomeSCM: From tabular data set to time-series simulator and causal estimation benchmark. arXiv preprint arXiv:2405.16069. https://github.com/Healthy-AI/IncomeSCM/```
 
 ```bibtex
 @misc{johansson2024incomescm,
