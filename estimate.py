@@ -90,7 +90,7 @@ def run_experiment(cfg):
             cv = RandomizedSearchCV(pipe, param_grid, cv=cv, refit=refit, scoring=scoring, return_train_score=True, n_iter=cfg.selection.n_iter, random_state=seed)
         else: 
             raise Exception('Unknown selection type %s' % cfg.selection.type)
-            
+
         # Fit estimator
         print('Performing cross-validation ...')
         cv.fit(df_obs, np.random.rand(df_obs.shape[0])) # @TODO: Don't want to pass around this dummy outcome!
@@ -112,6 +112,7 @@ def run_experiment(cfg):
         if cfg.experiment.test_output:
             print(cv.best_params_)
             print(cv.best_estimator_.predict(df_obs.iloc[:10]))
+            print(df.iloc[:1])
 
         # Save results
         r_path = os.path.join(results_dir, '%s.%s.cv_results.csv' % (cfg.experiment.label, i))
