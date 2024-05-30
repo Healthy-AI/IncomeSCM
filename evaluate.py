@@ -63,8 +63,8 @@ def evaluate_estimators(cfg):
 
     # Results
     ope_results = {}
-    hpw_results = {} # Results for hours-per-week subsets
-    hpw_cates = {}
+    strat_results = {} # Results for stratified CATE
+    strat_cates = {}
 
     # Evaluate all estimators 
     for i, v in estimators.items(): 
@@ -89,32 +89,32 @@ def evaluate_estimators(cfg):
         ope_result.to_csv(r_path) 
 
         # Evaluate CATE for stratified by hours-per-week
-        hpw_result, hpw_cate = cate_hpw_evaluation(cate_est, df0, df1, c_out)
-        hpw_cate['estimator'] = i
-        hpw_result['experiment'] = cfg.experiment.label
-        hpw_result['estimator'] = i
-        hpw_result = hpw_result[['experiment', 'estimator'] + [c for c in hpw_result.columns if not c in ['experiment', 'estimator']]]
-        r_path = os.path.join(results_dir, '%s.%s.hpw_results.csv' % (cfg.experiment.label, i))
-        hpw_result.to_csv(r_path) 
+        strat_result, strat_cate = cate_strat_evaluation(cate_est, df0, df1, c_out, c_strat='education-num', bins=16)
+        strat_cate['estimator'] = i
+        strat_result['experiment'] = cfg.experiment.label
+        strat_result['estimator'] = i
+        strat_result = strat_result[['experiment', 'estimator'] + [c for c in strat_result.columns if not c in ['experiment', 'estimator']]]
+        r_path = os.path.join(results_dir, '%s.%s.strat_results.csv' % (cfg.experiment.label, i))
+        strat_result.to_csv(r_path) 
 
         # Store results for overview
         ope_results[i] = ope_result
-        hpw_results[i] = hpw_result
-        hpw_cates[i] = hpw_cate
+        strat_results[i] = strat_result
+        strat_cates[i] = strat_cate
         
     # Create overview and store results
     df_ope_all = pd.concat(ope_results.values(), axis=0)
-    df_hpw_all = pd.concat(hpw_results.values(), axis=0)
-    hpw_cates = pd.concat(hpw_cates.values(), axis=0)
+    df_strat_all = pd.concat(strat_results.values(), axis=0)
+    strat_cates = pd.concat(strat_cates.values(), axis=0)
 
     r_path = os.path.join(results_dir, '%s.ope_results.csv' % (cfg.experiment.label))
     df_ope_all.to_csv(r_path)
 
-    r_path = os.path.join(results_dir, '%s.hpw_results.csv' % (cfg.experiment.label))
-    df_hpw_all.to_csv(r_path)
+    r_path = os.path.join(results_dir, '%s.strat_results.csv' % (cfg.experiment.label))
+    df_strat_all.to_csv(r_path)
 
 
-    # Visualize CATE v hpw
+    # Visualize CATE v strata
     plt.rc('font', family='serif', size=18)
     colors = ['C0']
     markers = ['o','v','^','<','>','p','s','*','d','P']
@@ -123,23 +123,23 @@ def evaluate_estimators(cfg):
     divisor = 1000
 
     # Sample CATE
-    plt.fill_between(hpw_cate['hpw'], hpw_cate['cate_sample_l']/divisor, hpw_cate['cate_sample_u']/divisor, alpha=0.1, color='k', lw=0)
-    plt.plot(hpw_cate['hpw'], hpw_cate['cate_sample_r']/divisor, '--', color='k', marker=markers[0], label='CATE (Sample)', lw=3)
+    plt.fill_between(strat_cate['strata'], strat_cate['cate_sample_l']/divisor, strat_cate['cate_sample_u']/divisor, alpha=0.1, color='k', lw=0)
+    plt.plot(strat_cate['strata'], strat_cate['cate_sample_r']/divisor, '--', color='k', marker=markers[0], label='CATE (Sample)', lw=3)
 
     # All the estimated cates
     i = 1
     estimators_sel = ['s-rfr', 's-xgbr', 't-ridge', 't-rfr', 't-xgbr']
     for e in estimators_sel:
-        dfe = hpw_cates[hpw_cates['estimator']==e]
-        plt.fill_between(dfe['hpw'], dfe['cate_est_l']/divisor, dfe['cate_est_u']/divisor, alpha=0.1, color='C%d' % i, lw=0)
-        plt.plot(dfe['hpw'], dfe['cate_est_r']/divisor, color='C%d' % i, marker=markers[i], label=TABLE_LABELS[e], lw=2)
+        dfe = strat_cates[strat_cates['estimator']==e]
+        plt.fill_between(dfe['strata'], dfe['cate_est_l']/divisor, dfe['cate_est_u']/divisor, alpha=0.1, color='C%d' % i, lw=0)
+        plt.plot(dfe['strata'], dfe['cate_est_r']/divisor, color='C%d' % i, marker=markers[i], label=TABLE_LABELS[e], lw=2)
         i += 1
 
-    plt.xlabel('Hours per week')
+    plt.xlabel('Education (num)')
     plt.ylabel('CATE (\$%d)' % divisor)
     plt.legend()
 
-    path = os.path.join(results_dir, '%s.hpw_results.pdf' % (cfg.experiment.label))
+    path = os.path.join(results_dir, '%s.strat_results.pdf' % (cfg.experiment.label))
     plt.tight_layout()
     plt.savefig(path)
     os.system('pdfcrop %s %s' % (path, path))

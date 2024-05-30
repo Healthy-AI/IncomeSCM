@@ -19,6 +19,8 @@ TABLE_LABELS = {
     't-rfr': 'T-learner (RF)'
 }
 
+NON_CATE = ['ipw-lr', 'ipw-rfc', 'ipww-lr', 'ipww-rfc', 'match-nn-eu']
+
 def present_results(sim_cfg, est_cfg):
     """ Estimate the causal effect of interventions and evaluate the results
     """
@@ -42,10 +44,10 @@ def present_results(sim_cfg, est_cfg):
             Rope = pd.read_csv(ope_path, index_col=0)
             R = pd.merge(R, Rope, on=['experiment', 'estimator'])
 
-        hpw_path = os.path.join(results_dir, '%s.%s.hpw_results.csv' % (est_cfg.experiment.label, e))
-        if os.path.isfile(hpw_path):
-            Rhpw = pd.read_csv(hpw_path, index_col=0)
-            R = pd.merge(R, Rhpw, on=['experiment', 'estimator'])
+        strat_path = os.path.join(results_dir, '%s.%s.strat_results.csv' % (est_cfg.experiment.label, e))
+        if os.path.isfile(strat_path):
+            Rstrat = pd.read_csv(strat_path, index_col=0)
+            R = pd.merge(R, Rstrat, on=['experiment', 'estimator'])
 
         df = pd.concat([df, R], axis=0)
     
@@ -64,16 +66,23 @@ def present_results(sim_cfg, est_cfg):
         if (df['estimator']==e).sum()>0:
             r = df[df['estimator']==e].iloc[0]
             if e.startswith('ipw'):
-                log_n_print(f, '%s & %.2f & (%.2f, %.2f) & %.0f & (%.0f, %.0f) & %.2f \\\\' % (l, r['CATE_R2_r'], r['CATE_R2_r_l'], r['CATE_R2_r_u'], r['ATE_AE_r'], r['ATE_AE_r_l'], r['ATE_AE_r_u'], r['test_AUC']))
+                if e in NON_CATE:
+                    log_n_print(f, '%s & & & %.0f & (%.0f, %.0f) & %.2f \\\\' % (l, r['ATE_AE_r'], r['ATE_AE_r_l'], r['ATE_AE_r_u'], r['test_AUC']))
+                else:
+                    log_n_print(f, '%s & %.2f & (%.2f, %.2f) & %.0f & (%.0f, %.0f) & %.2f \\\\' % (l, r['CATE_R2_r'], r['CATE_R2_r_l'], r['CATE_R2_r_u'], r['ATE_AE_r'], r['ATE_AE_r_l'], r['ATE_AE_r_u'], r['test_AUC']))
             else:
-                log_n_print(f, '%s & %.2f & (%.2f, %.2f) & %.0f & (%.0f, %.0f) & %.2f \\\\' % (l, r['CATE_R2_r'], r['CATE_R2_r_l'], r['CATE_R2_r_u'], r['ATE_AE_r'], r['ATE_AE_r_l'], r['ATE_AE_r_u'], r['test_R2']))
+                if e in NON_CATE:
+                    log_n_print(f, '%s &  &  & %.0f & (%.0f, %.0f) & %.2f \\\\' % (l, r['ATE_AE_r'], r['ATE_AE_r_l'], r['ATE_AE_r_u'], r['test_R2']))
+                else:
+                    log_n_print(f, '%s & %.2f & (%.2f, %.2f) & %.0f & (%.0f, %.0f) & %.2f \\\\' % (l, r['CATE_R2_r'], r['CATE_R2_r_l'], r['CATE_R2_r_u'], r['ATE_AE_r'], r['ATE_AE_r_l'], r['ATE_AE_r_u'], r['test_R2']))
 
-    log_n_print(f, '\n\n# CATE HPW RESULTS')
+
+    log_n_print(f, '\n\n# CATE STRATIFICATION RESULTS')
     for e in ['s-xgbr', 's-rfr', 't-ridge', 't-xgbr', 't-rfr']:
         l = TABLE_LABELS[e]
         if (df['estimator']==e).sum()>0:
             r = df[df['estimator']==e].iloc[0]
-            log_n_print(f, '%s & %.2f & (%.2f, %.2f)  \\\\' % (l, r['CATE_hpw_R2_r'], r['CATE_hpw_R2_r_l'], r['CATE_hpw_R2_r_u']))
+            log_n_print(f, '%s & %.2f & (%.2f, %.2f)  \\\\' % (l, r['CATE_strat_R2_r'], r['CATE_strat_R2_r_l'], r['CATE_strat_R2_r_u']))
 
 
     # TABLE 1

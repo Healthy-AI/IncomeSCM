@@ -198,6 +198,6 @@ variables:
       type: IncomeTransition
       sampler: '#init_sampler'
       prev_weight: 0.95
-      self.max_raise_frac: 0.04
+      self.max_raise_frac: 0.05
     seq_transform_input: True
     seq_fit: False
