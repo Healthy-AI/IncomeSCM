@@ -1,3 +1,4 @@
+import os
 import argparse
 import sklearn
 sklearn.set_config(transform_output="pandas")
@@ -17,6 +18,8 @@ def sample(cfg):
     policies = cfg.samples.policy
     if type(policies) == str:
         policies = [policies]
+
+    os.makedirs(cfg.samples.path, exist_ok=True)
 
     # Sample from all target policies _with the same starting state (due to the seed)_
     for pol in policies: 
