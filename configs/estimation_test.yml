@@ -32,6 +32,7 @@ estimators:
     base_estimator__tree_method: ['hist']
     base_estimator__eta: [0.1, 0.3, 0.5, 0.7]
     base_estimator__max_depth: [3, 5, 7, 9]
+    base_estimator__random_state: [0]
 
 backpup: 
 
