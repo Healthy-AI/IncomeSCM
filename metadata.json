@@ -1,4 +1,12 @@
 {
+    
+    "@type": "sc:Dataset",
+    "name": "IncomeSCM CATE Dataset",
+    "url": "https://github.com/Healthy-AI/IncomeSCM/",
+    "description": "A benchmark for causal effect estimation based on the Adult data set"
+    "dateModified": "2024-05-30T16:08:40.94",
+    "datePublished": "2024-05-30T16:08:40.94",
+    "license": "cc-by-4.0",
     "@context": {
         "@language": "en",
         "@vocab": "https://schema.org/",
@@ -894,11 +902,5 @@
         "@type": "sc:Person",
         "name": "Fredrik D. Johansson",
         "url": "https://www.fredjo.com"
-    },
-    "dateModified": "2024-05-30T16:08:40.94",
-    "datePublished": "2024-05-30T16:08:40.94",
-    "@type": "sc:Dataset",
-    "name": "IncomeSCM CATE Dataset",
-    "url": "https://github.com/Healthy-AI/IncomeSCM/",
-    "description": "A benchmark for causal effect estimation based on the Adult data set"
+    }    
 }
