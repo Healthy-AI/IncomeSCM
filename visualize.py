@@ -11,7 +11,6 @@ from income.util import *
 def save_crop_close(path):
     plt.tight_layout()
     plt.savefig(path)
-    os.system('pdfcrop %s %s' % (path, path))
     plt.close()
 
 

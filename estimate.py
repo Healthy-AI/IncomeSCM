@@ -116,6 +116,7 @@ def run_experiment(cfg):
         if cfg.experiment.test_output:
             print('#####Random state: #####')
             print(np.random.get_state())
+            print(cv.best_estimator_.predict(df_obs.iloc[:10]))
 
         # Save results
         r_path = os.path.join(results_dir, '%s.%s.cv_results.csv' % (cfg.experiment.label, i))

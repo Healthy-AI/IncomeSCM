@@ -142,7 +142,6 @@ def evaluate_estimators(cfg):
     path = os.path.join(results_dir, '%s.strat_results.pdf' % (cfg.experiment.label))
     plt.tight_layout()
     plt.savefig(path)
-    os.system('pdfcrop %s %s' % (path, path))
     plt.close()
 
 
