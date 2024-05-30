@@ -12,11 +12,22 @@ pip install scikit-learn==1.4.1.post1 pandas==2.0.1 PyYAML==6.0 xgboost==2.0.0 m
 git clone git@github.com:Healthy-AI/IncomeSCM.git
 cd IncomeSCM
 
+# Fits the simulator to the Adult data set with the default config. Fitting results are stored in models/<label>.log.txt
 python fit.py
+
+# Samples from the simulator
 python sample.py
+
+# Estimates causal effects with a suite of estimators
 python estimate.py
+
+# Evaluates estimates vs. sampled potential outcomes
 python evaluate.py
+
+# Creates the results tables used in the technical report. Results stored in results/<label>.table_results.tex
 python present_results.py
+
+# For results with minimal adjustment set
 python estimate.py -c configs/estimation_minimal.yml
 python evaluate.py -c configs/estimation_minimal.yml
 python present_results.py -c configs/estimation_minimal.yml
