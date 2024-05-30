@@ -5,7 +5,7 @@ import numpy as np
 sklearn.set_config(transform_output="pandas")
 from sklearn.exceptions import ConvergenceWarning
 
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV, KFold
 from sklearn.metrics import make_scorer, roc_auc_score, mean_squared_error, r2_score, root_mean_squared_error, accuracy_score
 
 from income.data import *
@@ -65,7 +65,8 @@ def run_experiment(cfg):
     for i, v in estimators.items(): 
 
         # Set random seed for each estimator
-        np.random.seed(cfg.experiment.seed)
+        seed = cfg.experiment.seed
+        np.random.seed(seed)
         
         label = v['label']
         print('Fitting estimator: %s...' % label)
@@ -80,11 +81,13 @@ def run_experiment(cfg):
         # Create pipeline, with transformation, including the intervention variable
         pipe = get_pipeline(e, c_num, c_cat)
 
+        cv = KFold(n_splits=cfg.selection.folds, shuffle=False)
+
         # Perform cross-validation
         if cfg.selection.type == 'grid':
-            cv = GridSearchCV(pipe, param_grid, cv=cfg.selection.folds, refit=refit, scoring=scoring, return_train_score=True)
+            cv = GridSearchCV(pipe, param_grid, cv=cv, refit=refit, scoring=scoring, return_train_score=True)
         elif cfg.selection.type == 'random':
-            cv = RandomizedSearchCV(pipe, param_grid, cv=cfg.selection.folds, refit=refit, scoring=scoring, return_train_score=True, n_iter=cfg.selection.n_iter)
+            cv = RandomizedSearchCV(pipe, param_grid, cv=cv, refit=refit, scoring=scoring, return_train_score=True, n_iter=cfg.selection.n_iter, random_state=seed)
         else: 
             raise Exception('Unknown selection type %s' % cfg.selection.type)
 
@@ -94,7 +97,7 @@ def run_experiment(cfg):
 
         # Fit estimator
         print('Performing cross-validation ...')
-        cv.fit(df_obs, np.ones(df_obs.shape[0])) # @TODO: Don't want to pass around this dummy outcome!
+        cv.fit(df_obs, np.random.rand(df_obs.shape[0])) # @TODO: Don't want to pass around this dummy outcome!
 
         # Create results data frame
         rows = []
