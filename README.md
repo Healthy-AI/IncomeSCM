@@ -32,6 +32,10 @@ python estimate.py -c configs/estimation_minimal.yml
 python evaluate.py -c configs/estimation_minimal.yml
 python present_results.py -c configs/estimation_minimal.yml
 ```
+or run the shellscript 
+```
+./replicate.sh
+```
 
 ## Using the CATE estimation data set (IncomeSCM-1.0.CATE)
 
