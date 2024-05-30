@@ -23,9 +23,6 @@ def run_experiment(cfg):
     """ Estimate the causal effect of interventions and evaluate the results
     """
 
-    # Set random seed
-    np.random.seed(cfg.experiment.seed)
-
     # Load data
     print('Loading data ...')
     obs_path = os.path.join(cfg.data.path, cfg.data.observational)
@@ -66,10 +63,13 @@ def run_experiment(cfg):
     ope_results = {}
 
     for i, v in estimators.items(): 
+
+        # Set random seed for each estimator
+        np.random.seed(cfg.experiment.seed)
         
         label = v['label']
         print('Fitting estimator: %s...' % label)
-        
+
         e = v['estimator']
         param_grid = v['param_grid']
         estimator_type = get_estimator(e)._effect_estimator_type
