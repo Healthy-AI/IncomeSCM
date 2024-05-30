@@ -40,6 +40,7 @@ or run the shellscript
 ## Using the CATE estimation data set (IncomeSCM-1.0.CATE)
 
 The IncomeSCM-1.0.CATE data set is sampled from the IncomeSCM-1.0 simulator, fit with the ```simulator.yml``` configuration file.
+The data files are located in samples/IncomeSCM-1.0.CATE.csv.zip or ./samples/IncomeSCM-1.0.CATE.zip (Pickled dataframes)
 
 ### Data set description
 
