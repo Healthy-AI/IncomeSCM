@@ -96,7 +96,7 @@ The main data set is stored as Pandas dataframes saved in Pickle (.pkl) files:
   * ```IncomeSCM-1.0.CATE_default.pkl``` (V1 simulator, default policy ($A$ observational), 50 000 samples, horizon T=5, seed=0)
   * ```IncomeSCM-1.0.CATE_no.pkl``` (V1 simulator, "No studies" policy ($A \leftarrow 0$), 50 000 samples, horizon T=5, seed=1)
   * ```IncomeSCM-1.0.CATE_full.pkl``` (V1 simulator, "Full-time studies" policy ($A \leftarrow 1$), 50 000 samples, horizon T=5, seed=1)
-  * All three files are contained in [IncomeSCM-1.0.CATE.zip](samples/IncomeSCM-1.0.CATE.zip)
+  * All three files are contained in [IncomeSCM-1.0.CATE.zip](./samples/IncomeSCM-1.0.CATE.zip)
 
 The data set can be loaded into Python using Pandas ```pd.read_pickle(...)```
 
