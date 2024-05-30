@@ -13,7 +13,7 @@ results:
 
 selection: 
   type: random # grid/random
-  n_iter: 10 # Used by random sampler
+  n_iter: 20 # Used by random sampler
   folds: 5
 
 data: 
@@ -25,12 +25,13 @@ data:
 
 estimators: 
 
-  ipw-lr: 
-    label: 'IPWEstimator (LR)'
-    estimator: 'IPWEstimator'
-    weighted: [False]
-    base_estimator: ['lr']
-    base_estimator__C: [0.005, 0.01, 0.05, 0.1, 0.5, 1, 5, 10, 50, 100]
+  s-xgbr: 
+    label: 'S-learner (XGBRegressor)'
+    estimator: 'S-learner'
+    base_estimator: ['xgbr']
+    base_estimator__tree_method: ['hist']
+    base_estimator__eta: [0.1, 0.3, 0.5, 0.7]
+    base_estimator__max_depth: [3, 5, 7, 9]
 
 backpup: 
 
