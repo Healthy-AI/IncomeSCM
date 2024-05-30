@@ -112,7 +112,7 @@ def run_experiment(cfg):
         if cfg.experiment.test_output:
             print(cv.best_params_)
             print(cv.best_estimator_.predict(df_obs.iloc[:10]))
-            print(df.iloc[:1])
+            print(df_obs.iloc[:1])
 
         # Save results
         r_path = os.path.join(results_dir, '%s.%s.cv_results.csv' % (cfg.experiment.label, i))
