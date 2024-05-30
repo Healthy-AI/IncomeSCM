@@ -40,7 +40,11 @@ def fit_simulator(cfg):
     warnings.filterwarnings("ignore", category=ConvergenceWarning)
     print('Fitting ARM model (suppressing warnings) ...')
 
+    
+    # Create sim dir
+    os.makedirs(cfg.simulator.path, exist_ok=True)
     log_file = os.path.join(cfg.simulator.path, '%s.log.txt' % cfg.simulator.label)
+
     A.fit(D_tr, log_file=log_file)
 
     # Save the simulator

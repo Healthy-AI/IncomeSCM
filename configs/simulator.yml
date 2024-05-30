@@ -19,6 +19,7 @@ samples:
   policy: ['default', 'full', 'no']  # 'default', or 'full', 'no'
   n_samples: 50000
   horizon: 7
+  csv: True
 
 figures: 
   path: figures/
