@@ -88,8 +88,9 @@ def run_experiment(cfg):
         else: 
             raise Exception('Unknown selection type %s' % cfg.selection.type)
 
-        print('#####Random state: #####')
-        print(np.random.get_state())
+        if cfg.experiment.test_output:
+            print('#####Random state: #####')
+            print(np.random.get_state())
 
         # Fit estimator
         print('Performing cross-validation ...')
@@ -108,6 +109,10 @@ def run_experiment(cfg):
                     row['%s_%s' % (h, s)] = score
             rows.append(row)
         df_cv = pd.DataFrame(rows)
+
+        if cfg.experiment.test_output:
+            print('#####Random state: #####')
+            print(np.random.get_state())
 
         # Save results
         r_path = os.path.join(results_dir, '%s.%s.cv_results.csv' % (cfg.experiment.label, i))
