@@ -6,6 +6,7 @@ experiment:
   intervention0: 'No studies'
   intervention1: 'Full-time studies'
   covariates: ['age','education-num', 'sex', 'relationship', 'income_prev', 'studies_prev'] 
+  test_output: False
 
 results:
   base_path: results/

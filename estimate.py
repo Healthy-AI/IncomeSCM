@@ -88,6 +88,9 @@ def run_experiment(cfg):
         else: 
             raise Exception('Unknown selection type %s' % cfg.selection.type)
 
+        print('#####Random state: #####')
+        print(np.random.get_state())
+
         # Fit estimator
         print('Performing cross-validation ...')
         cv.fit(df_obs, np.ones(df_obs.shape[0])) # @TODO: Don't want to pass around this dummy outcome!

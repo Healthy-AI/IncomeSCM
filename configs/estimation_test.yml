@@ -6,6 +6,7 @@ experiment:
   intervention0: 'No studies'
   intervention1: 'Full-time studies'
   covariates: ['age','education-num', 'sex', 'relationship', 'income_prev', 'studies_prev'] 
+  test_output: True
 
 results:
   base_path: results/
@@ -18,11 +19,20 @@ selection:
 data: 
   label: income
   path: samples/
-  observational: IncomeSCM-1.0.test_default_n1000_T7_s0.pkl
-  control: IncomeSCM-1.0.test_no_n1000_T7_s1.pkl 
-  target: IncomeSCM-1.0.test_full_n1000_T7_s1.pkl
+  observational: IncomeSCM-1.0_default_n50000_T7_s0.pkl
+  control: IncomeSCM-1.0_no_n50000_T7_s1.pkl 
+  target: IncomeSCM-1.0_full_n50000_T7_s1.pkl
 
 estimators: 
+
+  ipw-lr: 
+    label: 'IPWEstimator (LR)'
+    estimator: 'IPWEstimator'
+    weighted: [False]
+    base_estimator: ['lr']
+    base_estimator__C: [0.005, 0.01, 0.05, 0.1, 0.5, 1, 5, 10, 50, 100]
+
+backpup: 
 
   match-nn-eu: 
     label: 'Matching (NN-Euclidean)'

@@ -8,6 +8,7 @@ experiment:
   covariates: ['age', 'capital-net', 'hours-per-week', 'education-num', 'native-country', 
                'sex', 'race', 'education', 'workclass', 'occupation', 'marital-status', 
                'relationship', 'income_prev', 'studies_prev'] 
+  test_output: False
 
 results:
   base_path: results/
