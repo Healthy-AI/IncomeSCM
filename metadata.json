@@ -1,0 +1,904 @@
+{
+    "@context": {
+        "@language": "en",
+        "@vocab": "https://schema.org/",
+        "citeAs": "cr:citeAs",
+        "column": "cr:column",
+        "conformsTo": "dct:conformsTo",
+        "cr": "http://mlcommons.org/croissant/",
+        "data": {
+            "@id": "cr:data",
+            "@type": "@json"
+        },
+        "dataBiases": "cr:dataBiases",
+        "dataCollection": "cr:dataCollection",
+        "dataType": {
+            "@id": "cr:dataType",
+            "@type": "@vocab"
+        },
+        "dct": "http://purl.org/dc/terms/",
+        "extract": "cr:extract",
+        "field": "cr:field",
+        "fileProperty": "cr:fileProperty",
+        "fileObject": "cr:fileObject",
+        "fileSet": "cr:fileSet",
+        "format": "cr:format",
+        "includes": "cr:includes",
+        "isEnumeration": "cr:isEnumeration",
+        "jsonPath": "cr:jsonPath",
+        "key": "cr:key",
+        "md5": "cr:md5",
+        "parentField": "cr:parentField",
+        "path": "cr:path",
+        "personalSensitiveInformation": "cr:personalSensitiveInformation",
+        "recordSet": "cr:recordSet",
+        "references": "cr:references",
+        "regex": "cr:regex",
+        "repeated": "cr:repeated",
+        "replace": "cr:replace",
+        "sc": "https://schema.org/",
+        "separator": "cr:separator",
+        "source": "cr:source",
+        "subField": "cr:subField",
+        "transform": "cr:transform",
+        "wd": "https://www.wikidata.org/wiki/"
+    },
+    "alternateName": "IncomeSCM.CATE: A benchmark for causal effect estimation",
+    "conformsTo": "http://mlcommons.org/croissant/1.0",
+    "license": {
+        "@type": "sc:CreativeWork",
+        "name": "Unknown"
+    },
+    "distribution": [
+        {
+            "contentUrl": "https://github.com/Healthy-AI/IncomeSCM",
+            "contentSize": "2.2 MB",
+            "md5": "3da1b6218770f1c193fd498c98e926df",
+            "encodingFormat": "application/zip",
+            "@id": "IncomeSCM-1.0.CATE.csv.zip",
+            "@type": "cr:FileObject",
+            "name": "IncomeSCM-1.0.CATE.csv.zip",
+            "description": "Archive containing all the contents of the IncomeSCM CATE dataset"
+        },
+        {
+            "contentUrl": "IncomeSCM-1.0.CATE_default.csv",
+            "containedIn": {
+                "@id": "IncomeSCM-1.0.CATE.csv.zip"
+            },
+            "encodingFormat": "text/csv",
+            "@id": "IncomeSCM-1.0.CATE_default.csv_fileobject",
+            "@type": "cr:FileObject",
+            "name": "IncomeSCM-1.0.CATE_default.csv"
+        }
+        {
+            "contentUrl": "IncomeSCM-1.0.CATE_full.csv",
+            "containedIn": {
+                "@id": "IncomeSCM-1.0.CATE.csv.zip"
+            },
+            "encodingFormat": "text/csv",
+            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject",
+            "@type": "cr:FileObject",
+            "name": "IncomeSCM-1.0.CATE_full.csv"
+        }
+        {
+            "contentUrl": "IncomeSCM-1.0.CATE_no.csv",
+            "containedIn": {
+                "@id": "IncomeSCM-1.0.CATE.csv.zip"
+            },
+            "encodingFormat": "text/csv",
+            "@id": "IncomeSCM-1.0.CATE_no.csv_fileobject",
+            "@type": "cr:FileObject",
+            "name": "IncomeSCM-1.0.CATE_no.csv"
+        }
+    ],
+    "recordSet": [
+        {
+            "field": [
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "native-country"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_default.csv/native-country",
+                    "@type": "cr:Field",
+                    "name": "native-country"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_default.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "sex"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_default.csv/sex",
+                    "@type": "cr:Field",
+                    "name": "sex"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "race"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_default.csv/race",
+                    "@type": "cr:Field",
+                    "name": "race"
+                },
+                {
+                    "dataType": [
+                        "sc:Integer"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_default.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "age"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_default.csv/age",
+                    "@type": "cr:Field",
+                    "name": "age"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_default.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "education"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_default.csv/education",
+                    "@type": "cr:Field",
+                    "name": "education"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_default.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "workclass"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_default.csv/workclass",
+                    "@type": "cr:Field",
+                    "name": "workclass"
+                },
+              
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_default.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "occupation"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_default.csv/occupation",
+                    "@type": "cr:Field",
+                    "name": "occupation"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_default.csvfileobject"
+                        },
+                        "extract": {
+                            "column": "marital-status"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_default.csv/marital-status",
+                    "@type": "cr:Field",
+                    "name": "marital-status"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_default.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "relationship"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_default.csv/relationship",
+                    "@type": "cr:Field",
+                    "name": "relationship"
+                },
+                {
+                    "dataType": [
+                        "sc:Integer"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_default.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "capital-net"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_default.csv/capital-net",
+                    "@type": "cr:Field",
+                    "name": "capital-net"
+                },
+                {
+                    "dataType": [
+                        "sc:Integer"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_default.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "hours-per-week"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_default.csv/hours-per-week",
+                    "@type": "cr:Field",
+                    "name": "hours-per-week"
+                },
+                {
+                    "dataType": [
+                        "sc:Integer"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_default.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "educational-num"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_default.csv/educational-num",
+                    "@type": "cr:Field",
+                    "name": "educational-num"
+                },
+                {
+                    "dataType": [
+                        "sc:Integer"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_default.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "income_prev"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_default.csv/income_prev",
+                    "@type": "cr:Field",
+                    "name": "income_prev"
+                },
+                {
+                    "dataType": [
+                        "sc:Test"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_default.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "studies_prev"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_default.csv/studies_prev",
+                    "@type": "cr:Field",
+                    "name": "studies_prev"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_default.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "studies"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_default.csv/studies",
+                    "@type": "cr:Field",
+                    "name": "studies"
+                },
+                {
+                    "dataType": [
+                        "sc:Integer"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_default.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "income"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_default.csv/income",
+                    "@type": "cr:Field",
+                    "name": "income"
+                }
+            ],
+            "@id": "IncomeSCM-1.0.CATE_default.csv",
+            "@type": "cr:RecordSet",
+            "name": "IncomeSCM-1.0.CATE_default.csv"
+        },
+        {
+            "field": [
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "native-country"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_full.csv/native-country",
+                    "@type": "cr:Field",
+                    "name": "native-country"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "sex"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_full.csv/sex",
+                    "@type": "cr:Field",
+                    "name": "sex"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "race"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_full.csv/race",
+                    "@type": "cr:Field",
+                    "name": "race"
+                },
+                {
+                    "dataType": [
+                        "sc:Integer"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "age"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_full.csv/age",
+                    "@type": "cr:Field",
+                    "name": "age"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "education"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_full.csv/education",
+                    "@type": "cr:Field",
+                    "name": "education"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "workclass"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_full.csv/workclass",
+                    "@type": "cr:Field",
+                    "name": "workclass"
+                },
+              
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "occupation"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_full.csv/occupation",
+                    "@type": "cr:Field",
+                    "name": "occupation"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csvfileobject"
+                        },
+                        "extract": {
+                            "column": "marital-status"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_full.csv/marital-status",
+                    "@type": "cr:Field",
+                    "name": "marital-status"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "relationship"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_full.csv/relationship",
+                    "@type": "cr:Field",
+                    "name": "relationship"
+                },
+                {
+                    "dataType": [
+                        "sc:Integer"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "capital-net"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_full.csv/capital-net",
+                    "@type": "cr:Field",
+                    "name": "capital-net"
+                },
+                {
+                    "dataType": [
+                        "sc:Integer"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "hours-per-week"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_full.csv/hours-per-week",
+                    "@type": "cr:Field",
+                    "name": "hours-per-week"
+                },
+                {
+                    "dataType": [
+                        "sc:Integer"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "educational-num"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_full.csv/educational-num",
+                    "@type": "cr:Field",
+                    "name": "educational-num"
+                },
+                {
+                    "dataType": [
+                        "sc:Integer"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "income_prev"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_full.csv/income_prev",
+                    "@type": "cr:Field",
+                    "name": "income_prev"
+                },
+                {
+                    "dataType": [
+                        "sc:Test"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "studies_prev"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_full.csv/studies_prev",
+                    "@type": "cr:Field",
+                    "name": "studies_prev"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "studies"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_full.csv/studies",
+                    "@type": "cr:Field",
+                    "name": "studies"
+                },
+                {
+                    "dataType": [
+                        "sc:Integer"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "income"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_full.csv/income",
+                    "@type": "cr:Field",
+                    "name": "income"
+                }
+            ],
+            "@id": "IncomeSCM-1.0.CATE_full.csv",
+            "@type": "cr:RecordSet",
+            "name": "IncomeSCM-1.0.CATE_full.csv"
+        },
+        {
+            "field": [
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "native-country"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_no.csv/native-country",
+                    "@type": "cr:Field",
+                    "name": "native-country"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_no.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "sex"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_no.csv/sex",
+                    "@type": "cr:Field",
+                    "name": "sex"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_full.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "race"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_no.csv/race",
+                    "@type": "cr:Field",
+                    "name": "race"
+                },
+                {
+                    "dataType": [
+                        "sc:Integer"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_no.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "age"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_no.csv/age",
+                    "@type": "cr:Field",
+                    "name": "age"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_no.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "education"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_no.csv/education",
+                    "@type": "cr:Field",
+                    "name": "education"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_no.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "workclass"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_no.csv/workclass",
+                    "@type": "cr:Field",
+                    "name": "workclass"
+                },
+              
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_no.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "occupation"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_no.csv/occupation",
+                    "@type": "cr:Field",
+                    "name": "occupation"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_no.csvfileobject"
+                        },
+                        "extract": {
+                            "column": "marital-status"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_no.csv/marital-status",
+                    "@type": "cr:Field",
+                    "name": "marital-status"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_no.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "relationship"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_no.csv/relationship",
+                    "@type": "cr:Field",
+                    "name": "relationship"
+                },
+                {
+                    "dataType": [
+                        "sc:Integer"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_no.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "capital-net"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_no.csv/capital-net",
+                    "@type": "cr:Field",
+                    "name": "capital-net"
+                },
+                {
+                    "dataType": [
+                        "sc:Integer"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_no.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "hours-per-week"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_no.csv/hours-per-week",
+                    "@type": "cr:Field",
+                    "name": "hours-per-week"
+                },
+                {
+                    "dataType": [
+                        "sc:Integer"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_no.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "educational-num"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_no.csv/educational-num",
+                    "@type": "cr:Field",
+                    "name": "educational-num"
+                },
+                {
+                    "dataType": [
+                        "sc:Integer"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_no.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "income_prev"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_no.csv/income_prev",
+                    "@type": "cr:Field",
+                    "name": "income_prev"
+                },
+                {
+                    "dataType": [
+                        "sc:Test"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_no.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "studies_prev"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_no.csv/studies_prev",
+                    "@type": "cr:Field",
+                    "name": "studies_prev"
+                },
+                {
+                    "dataType": [
+                        "sc:Text"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_no.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "studies"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_no.csv/studies",
+                    "@type": "cr:Field",
+                    "name": "studies"
+                },
+                {
+                    "dataType": [
+                        "sc:Integer"
+                    ],
+                    "source": {
+                        "fileObject": {
+                            "@id": "IncomeSCM-1.0.CATE_no.csv_fileobject"
+                        },
+                        "extract": {
+                            "column": "income"
+                        }
+                    },
+                    "@id": "IncomeSCM-1.0.CATE_no.csv/income",
+                    "@type": "cr:Field",
+                    "name": "income"
+                }
+            ],
+            "@id": "IncomeSCM-1.0.CATE_no.csv",
+            "@type": "cr:RecordSet",
+            "name": "IncomeSCM-1.0.CATE_no.csv"
+        }
+    ],
+    "version": 2,
+    "keywords": [
+        "subject \u003E earth and nature"
+    ],
+    "isAccessibleForFree": true,
+    "creator": {
+        "@type": "sc:Person",
+        "name": "Fredrik D. Johansson",
+        "url": "https://www.fredjo.com"
+    },
+    "dateModified": "2024-05-30T16:08:40.94",
+    "datePublished": "2024-05-30T16:08:40.94",
+    "@type": "sc:Dataset",
+    "name": "IncomeSCM CATE Dataset",
+    "url": "https://github.com/Healthy-AI/IncomeSCM/",
+    "description": "A benchmark for causal effect estimation based on the Adult data set"
+}
