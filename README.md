@@ -73,7 +73,7 @@ The data set represents 13 variables extracted from the 1994 US Census bureau da
 **Outcome, $Y$**
 | Column  | Description | Type |
 | ------------- | ------------- | ------------- |
-| income  | Income 5 years after the intervention (USD)   | Numeric |
+| income  | Income 6 years after the intervention (USD)   | Numeric |
 
 ### Task description
 
