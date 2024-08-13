@@ -1,0 +1,204 @@
+experiment: 
+  label: '1.0'
+
+data: 
+  label: income
+  path: data/income/
+  download: True
+
+simulator: 
+  seed: 0
+  path: models/
+  label: IncomeSCM-1.0
+  seed: 0
+
+samples:
+  label: IncomeSCM-1.0.short
+  seed: [0,1]
+  path: samples/
+  policy: ['default', 'full', 'no']  # 'default', or 'full', 'no'
+  n_samples: 50000
+  horizon: 4
+  csv: True
+
+figures: 
+  path: figures/
+
+variables:
+  time: 
+    parents: []
+    sampler: 
+      type: ConstantSampler
+      value: 0
+    seq_parents_curr: []
+    seq_parents_prev: [time]
+    seq_sampler: 
+      type: IncrementSampler
+      increment: 1
+    seq_transform_input: False
+    
+  age:
+    parents: []
+    sampler: 
+      type: GaussianVariable
+      round_result: True
+      bounds: [18, 150]
+    seq_parents_curr: []
+    seq_parents_prev: [age]
+    seq_sampler: 
+      type: IncrementSampler
+      increment: 1
+    seq_transform_input: False
+
+  race:
+    parents: []
+    sampler: multinomial
+    seq_parents_prev: [race]
+    seq_sampler: None
+
+  sex:
+    parents: []
+    sampler: multinomial
+    seq_parents_prev: [sex]
+    seq_sampler: None
+
+  native-country:
+    parents: []
+    sampler: multinomial
+    seq_parents_prev: [native-country]
+    seq_sampler: None
+
+  education:
+    parents: [age, race, sex, native-country]
+    sampler: 
+      type: LogisticSampler
+      multi_class: multinomial
+    seq_parents_curr: []
+    seq_parents_prev: [education, studies]
+    seq_sampler: 
+      type: EducationTransition
+    seq_transform_input: True 
+
+  education-num:
+    parents: [education]
+    sampler: 
+      type: EducationNumSampler
+    transform_input: False
+    seq_parents_curr: [education]
+    seq_sampler: 
+      type: EducationNumSampler
+    seq_transform_input: False 
+
+  workclass:
+    parents: [age, education, race, sex, native-country]
+    sampler: 
+      type: LogisticSampler
+      multi_class: multinomial
+    transform_input: True
+    seq_parents_prev: [workclass, studies]
+    seq_sampler: 
+      type: WorkclassTransition
+      p_stay: 0.95
+    seq_transform_input: False 
+
+  marital-status:
+    parents: [age, education, workclass, race, native-country]
+    sampler: 
+      type: LogisticSampler
+      multi_class: multinomial
+    transform_input: True
+    seq_parents_curr: [age]
+    seq_parents_prev: [marital-status, studies]
+    seq_sampler: 
+      type: MaritalStatusTransition
+      a_stay: 5
+    seq_transform_input: False 
+
+  # @TODO: Could make dependent on short-term study too
+  occupation:
+    parents: [age, education, workclass, race, sex, native-country]
+    sampler: 
+      type: LogisticSampler
+      multi_class: multinomial
+    transform_input: True
+    seq_parents_curr: [age, education, workclass, race, sex, native-country]
+    seq_parents_prev: [occupation, studies]
+    seq_sampler: 
+      type: OccupationTransition
+      sampler: '#init_sampler' # If using init_sampler, must pass all parents both to sampler and seq_sampler
+      p_stay: 0.9
+    seq_transform_input: True 
+
+  relationship:
+    parents: [age, education, workclass, marital-status, race, sex]
+    sampler: 
+      type: RandomForestClassifierSampler
+      n_estimators: 20
+      min_samples_leaf: 40
+    seq_parents_curr: [age, education, workclass, marital-status, race, sex]
+    seq_parents_prev: [relationship]
+    seq_sampler: 
+      type: RelationshipTransition
+      sampler: '#init_sampler'
+      p_stay: 0.9
+    seq_transform_input: True 
+
+  hours-per-week:
+    parents: [age, education, workclass, occupation, marital-status, race, relationship, sex]
+    sampler: 
+      type: GaussianRandomForestSampler
+      min_samples_leaf: 50
+      round_result: True
+      bounds: [0, 100]
+      std_mod: 2.5
+    transform_input: True
+    seq_parents_curr: [age, education, workclass, occupation, marital-status, race, relationship, sex]
+    seq_parents_prev: [hours-per-week]
+    seq_sampler: 
+      type: HoursPerWeekTransition
+      transformation: '#transformation'
+      prev_weight: 0.9
+      sampler: '#init_sampler'
+    seq_transform_input: False 
+
+  capital-net:
+    parents: [age, education, workclass, occupation, marital-status, race, relationship, sex]
+    sampler: 
+      type: ZeroOrGaussianRegressionSampler
+      zero_estimator: LogisticRegression
+      estimator: Ridge
+      round_result: True
+    seq_parents_curr: [age, education, workclass, occupation, marital-status, race, relationship, sex]
+    seq_parents_prev: [capital-net]
+    seq_sampler: 
+      type: CapitalTransition
+      sampler: '#init_sampler' 
+      transformation: '#transformation'
+    seq_transform_input: False 
+
+  studies:
+    parents: [age, sex, education, education-num, relationship]
+    sampler: 
+      type: StudiesSampler
+    transform_input: False
+    seq_parents_curr: [age, sex, education, education-num, relationship, time]
+    seq_parents_prev: [studies, income]
+    seq_sampler: 
+      type: StudiesTransition
+      sampler: '#init_sampler'
+    seq_transform_input: False
+
+  income:
+    parents: [hours-per-week, age, education, workclass, marital-status, occupation, race, sex, capital-net, studies]
+    sampler: 
+      type: IncomeSampler
+    transform_input: True
+    seq_parents_curr: [hours-per-week, age, education, workclass, marital-status, occupation, race, sex, capital-net, studies]
+    seq_parents_prev: [studies, income]
+    seq_sampler: 
+      type: IncomeTransition
+      sampler: '#init_sampler'
+      prev_weight: 0.95
+      self.max_raise_frac: 0.05
+    seq_transform_input: True
+    seq_fit: False

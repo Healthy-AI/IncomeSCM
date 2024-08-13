@@ -25,7 +25,19 @@ data:
   control: IncomeSCM-1.0_no_n50000_T7_s1.pkl 
   target: IncomeSCM-1.0_full_n50000_T7_s1.pkl
 
-estimators:
+estimators: 
+  dml-mix: 
+    label: 'DMLCATEEstimator (Mix)'
+    estimator: 'DMLCATEEstimator'
+    y_estimator: ['xgbr']  
+    t_estimator: ['lr']
+    e_estimator: ['ridge']
+    y_estimator__tree_method: ['hist']
+    y_estimator__eta: [0.1, 0.3, 0.5, 0.7]
+    y_estimator__max_depth: [3, 5, 7, 9]
+    t_estimator__C: [0.005, 0.01, 0.05, 0.1, 0.5, 1, 5, 10, 50, 100]
+    e_estimator__alpha: [0.01, 0.02, 0.1, 0.2, 1, 2, 10, 20, 100, 200, 1000]
+
   dml-lin: 
     label: 'DMLCATEEstimator (Linear)'
     estimator: 'DMLCATEEstimator'

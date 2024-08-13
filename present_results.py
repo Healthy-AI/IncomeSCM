@@ -20,10 +20,11 @@ TABLE_LABELS = {
     'dml-lin': 'DML (Linear)',
     'dml-rf': 'DML (RF)',
     'dml-xgb': 'DML (XGB)',
+    'dml-mix': 'DML (Mix)',
 }
 
 NON_CATE = ['ipw-lr', 'ipw-rfc', 'ipww-lr', 'ipww-rfc', 'match-nn-eu']
-STRAT_MODELS = ['s-xgbr', 's-rfr', 't-ridge', 't-xgbr', 't-rfr', 'dml-lin', 'dml-rf', 'dml-xgb']
+STRAT_MODELS = ['s-xgbr', 's-rfr', 't-ridge', 't-xgbr', 't-rfr', 'dml-lin', 'dml-rf', 'dml-xgb', 'dml-mix']
 
 def present_results(sim_cfg, est_cfg):
     """ Estimate the causal effect of interventions and evaluate the results
