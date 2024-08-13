@@ -5,7 +5,7 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.linear_model import LinearRegression, Ridge, Lasso, LogisticRegression
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 from sklearn.metrics import roc_auc_score, mean_squared_error, r2_score, root_mean_squared_error, make_scorer, accuracy_score
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
@@ -57,12 +57,11 @@ def get_pipeline(estimator, c_num, c_cat):
 def get_scoring(estimator_type, c_int, c_out):
     """ Scoring metrics """
     
-    if estimator_type == 'regression':
+    if estimator_type == 'regression' or estimator_type == 'dml':
         scoring = {"R2": make_scorer_df(r2_score, response_method='predict', c_target=c_out), 
                "RMSE": make_scorer_df(root_mean_squared_error, response_method='predict', c_target=c_out), 
                "MSE": make_scorer_df(mean_squared_error, response_method='predict', c_target=c_out)}
         refit = 'R2'
-
     elif estimator_type == 'propensity':
         scoring = {"AUC": make_scorer_df(roc_auc_score, response_method='predict_proba', c_target=c_int, multi_class='ovr'), 
                "ACC": make_scorer_df(accuracy_score, response_method='predict', c_target=c_int)}
@@ -105,6 +104,9 @@ def get_estimator(e):
 
     elif e in ['XGBRegressor', 'xgbr']:
         return xgb.XGBRegressor()
+
+    elif e in ['XGBClassifier', 'xgbc']:
+        return xgb.XGBClassifier()
 
     elif e in ['T-learner', 'T_learner', 't_learner']:
         return T_learner()
@@ -446,7 +448,10 @@ class T_learner(CausalEffectEstimator):
 
 
 class DMLCATEEstimator(CausalEffectEstimator):
-    def __init__(self, y_estimator, t_estimator, e_estimator, c_int='intervention', c_out='outcome', c_adj=[], v_int0=0, v_int1=1):
+
+    _effect_estimator_type = "dml"
+
+    def __init__(self, y_estimator='ridge', t_estimator='lr', e_estimator='ridge', c_int='intervention', c_out='outcome', c_adj=[], v_int0=0, v_int1=1):
 
         self.c_int = c_int
         self.c_out = c_out
@@ -461,36 +466,31 @@ class DMLCATEEstimator(CausalEffectEstimator):
         
     def fit(self, x, y=None, sample_weight=None):
 
-        t = 1*(x[self.c_int] == self.v_int1)
-        y = x[self.c_out]
+        x0, x1 = train_test_split(x, test_size=0.5)
+
+        t0 = 1*(x0[self.c_int] == self.v_int1)
+        y0 = x0[self.c_out]
+        t1 = 1*(x1[self.c_int] == self.v_int1)
+        y1 = x1[self.c_out]
 
         c_adjs = [c for c in x.columns if c in self.c_adj or c.partition('__')[0] in self.c_adj] 
 
-        self.y_estimator.fit(x[c_adjs], y)
-        self.t_estimator.fit(x[c_adjs], t)
+        self.y_estimator.fit(x0[c_adjs], y0)
+        self.t_estimator.fit(x0[c_adjs], t0)
 
-        ry = y - self.y_estimator.predict(x[c_adjs])
-        rt = t - self.t_estimator.predict_proba(x[c_adjs])[:,1]
+        ry = y1 - self.y_estimator.predict(x1[c_adjs])
+        rt = t1 - self.t_estimator.predict_proba(x1[c_adjs])[:,1]
 
         w = rt**2
         z = ry/rt
 
-        self.e_estimator.fit(x[c_adjs], z, sample_weight=w)
+        self.e_estimator.fit(x1[c_adjs], z, sample_weight=w)
 
         return self
 
         
     def predict(self, x):
-        """ Returns the predicted CATE value for the given inputs """
-
-        c_adjs = [c for c in x.columns if c in self.c_adj or c.partition('__')[0] in self.c_adj] 
-        return self.e_estimator.predict(x[c_adjs])
-
-    def predict_proba(self, x):
-        pass
-
-    def predict_outcomes(self, x):
-        """ Returns predictions of both potential outcomes """
+        """ Returns the predicted outcome value for the given inputs and given interventions """
 
         tb = 1*(x[self.c_int]==self.v_int1)
 
@@ -504,5 +504,27 @@ class DMLCATEEstimator(CausalEffectEstimator):
         y1p = yp + (1-tp)*ep
 
         yp = tb*y1p + (1-tb)*y0p
-        
+
         return yp.values
+
+    def predict_proba(self, x):
+        pass
+
+    def set_params(self, **params):
+        """ Set the parameter of the estimator and base estimators """
+
+        # To enable setting base estimators parameter by string
+        if 'y_estimator' in params: 
+            self.y_estimator = get_estimator(params['y_estimator'])
+            del params['y_estimator']
+
+        if 't_estimator' in params: 
+            self.t_estimator = get_estimator(params['t_estimator'])
+            del params['t_estimator']
+
+        if 'e_estimator' in params: 
+            self.e_estimator = get_estimator(params['e_estimator'])
+            del params['e_estimator']
+
+        super().set_params(**params)
+        return self

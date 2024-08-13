@@ -16,10 +16,14 @@ TABLE_LABELS = {
     's-rfr': 'S-learner (RF)',
     't-ridge': 'T-learner (Ridge)',
     't-xgbr': 'T-learner (XGB)',
-    't-rfr': 'T-learner (RF)'
+    't-rfr': 'T-learner (RF)',
+    'dml-lin': 'DML (Linear)',
+    'dml-rf': 'DML (RF)',
+    'dml-xgb': 'DML (XGB)',
 }
 
 NON_CATE = ['ipw-lr', 'ipw-rfc', 'ipww-lr', 'ipww-rfc', 'match-nn-eu']
+STRAT_MODELS = ['s-xgbr', 's-rfr', 't-ridge', 't-xgbr', 't-rfr', 'dml-lin', 'dml-rf', 'dml-xgb']
 
 def present_results(sim_cfg, est_cfg):
     """ Estimate the causal effect of interventions and evaluate the results
@@ -73,7 +77,7 @@ def present_results(sim_cfg, est_cfg):
 
 
     log_n_print(f, '\n\n# CATE STRATIFICATION RESULTS')
-    for e in ['s-xgbr', 's-rfr', 't-ridge', 't-xgbr', 't-rfr']:
+    for e in STRAT_MODELS:
         l = TABLE_LABELS[e]
         if (df['estimator']==e).sum()>0:
             r = df[df['estimator']==e].iloc[0]
