@@ -40,6 +40,7 @@ or run the shellscript
 ## Using the CATE estimation data set (IncomeSCM-1.0.CATE)
 
 The IncomeSCM-1.0.CATE data set is sampled from the IncomeSCM-1.0 simulator, fit with the ```simulator.yml``` configuration file.
+The data files are located in samples/IncomeSCM-1.0.CATE.csv.zip or ./samples/IncomeSCM-1.0.CATE.zip (Pickled dataframes)
 
 ### Data set description
 
@@ -72,7 +73,7 @@ The data set represents 13 variables extracted from the 1994 US Census bureau da
 **Outcome, $Y$**
 | Column  | Description | Type |
 | ------------- | ------------- | ------------- |
-| income  | Income 5 years after the intervention (USD)   | Numeric |
+| income  | Income 6 years after the intervention (USD)   | Numeric |
 
 ### Task description
 
@@ -97,9 +98,9 @@ Instead, we sample both counterfactual outcomes for a fixed of baseline subjects
 ### File description
 
 The main data set is stored as Pandas dataframes saved in Pickle (.pkl) files: 
-  * ```IncomeSCM-1.0.CATE_default.pkl``` (V1 simulator, default policy ($A$ observational), 50 000 samples, horizon T=5, seed=0)
-  * ```IncomeSCM-1.0.CATE_no.pkl``` (V1 simulator, "No studies" policy ($A \leftarrow 0$), 50 000 samples, horizon T=5, seed=1)
-  * ```IncomeSCM-1.0.CATE_full.pkl``` (V1 simulator, "Full-time studies" policy ($A \leftarrow 1$), 50 000 samples, horizon T=5, seed=1)
+  * ```IncomeSCM-1.0.CATE_default.pkl``` (V1 simulator, default policy ($A$ observational), 50 000 samples, horizon T=7, seed=0)
+  * ```IncomeSCM-1.0.CATE_no.pkl``` (V1 simulator, "No studies" policy ($A \leftarrow 0$), 50 000 samples, horizon T=7, seed=1)
+  * ```IncomeSCM-1.0.CATE_full.pkl``` (V1 simulator, "Full-time studies" policy ($A \leftarrow 1$), 50 000 samples, horizon T=7, seed=1)
   * All three files are contained in [IncomeSCM-1.0.CATE.zip](./samples/IncomeSCM-1.0.CATE.zip)
 
 The data set can be loaded into Python using Pandas ```pd.read_pickle(...)```
