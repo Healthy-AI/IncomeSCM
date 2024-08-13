@@ -339,12 +339,12 @@ class S_learner(CausalEffectEstimator):
         y = x[self.c_out]
 
         xbin = x.copy()
-        x[self.c_int_bin] = 1*(t == self.v_int1)
+        xbin[self.c_int_bin] = 1*(t == self.v_int1)
         
         adj = self.c_adj + [self.c_int_bin] # Add intervention to adjustment columns
-        c_adjs = [c for c in x.columns if c in adj or c.partition('__')[0] in adj] # @TODO: This won't warn if there are columns in adj not represented in columns
+        c_adjs = [c for c in xbin.columns if c in adj or c.partition('__')[0] in adj] # @TODO: This won't warn if there are columns in adj not represented in columns
 
-        self.base_estimator.fit(x[c_adjs], y)
+        self.base_estimator.fit(xbin[c_adjs], y)
 
         return self
 
@@ -352,12 +352,12 @@ class S_learner(CausalEffectEstimator):
         """ Predicts the potential outcomes given covariates and treatments in x """
 
         xbin = x.copy()
-        x[self.c_int_bin] = 1*(x[self.c_int] == self.v_int1)
+        xbin[self.c_int_bin] = 1*(xbin[self.c_int] == self.v_int1)
 
         adj = self.c_adj + [self.c_int_bin] # Add intervention to adjustment columns
-        c_adjs = [c for c in x.columns if c in adj or c.partition('__')[0] in adj]
+        c_adjs = [c for c in xbin.columns if c in adj or c.partition('__')[0] in adj]
 
-        yp = self.base_estimator.predict(x[c_adjs])
+        yp = self.base_estimator.predict(xbin[c_adjs])
 
         return yp
 
