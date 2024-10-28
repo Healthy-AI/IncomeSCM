@@ -1,0 +1,75 @@
+experiment: 
+  label: IncomeSCM-1.0.CATE.minimal_DML
+  seed: 0
+  outcome: 'income'
+  intervention: 'studies'
+  intervention0: 'No studies'
+  intervention1: 'Full-time studies'
+  covariates: ['age','education-num', 'sex', 'relationship', 'income_prev', 'studies_prev'] 
+  test_output: False
+
+results:
+  base_path: results/
+
+selection: 
+  type: random # grid/random
+  n_iter: 20 # Used by random sampler
+  folds: 5
+
+data: 
+  label: income
+  path: samples/
+  observational: IncomeSCM-1.0_default_n50000_T7_s0.pkl
+  control: IncomeSCM-1.0_no_n50000_T7_s1.pkl 
+  target: IncomeSCM-1.0_full_n50000_T7_s1.pkl
+
+estimators: 
+  dml-mix: 
+    label: 'DMLCATEEstimator (Mix)'
+    estimator: 'DMLCATEEstimator'
+    y_estimator: ['xgbr']  
+    t_estimator: ['lr']
+    e_estimator: ['ridge']
+    y_estimator__tree_method: ['hist']
+    y_estimator__eta: [0.1, 0.3, 0.5, 0.7]
+    y_estimator__max_depth: [3, 5, 7, 9]
+    t_estimator__C: [0.005, 0.01, 0.05, 0.1, 0.5, 1, 5, 10, 50, 100]
+    e_estimator__alpha: [0.01, 0.02, 0.1, 0.2, 1, 2, 10, 20, 100, 200, 1000]
+
+  dml-lin: 
+    label: 'DMLCATEEstimator (Linear)'
+    estimator: 'DMLCATEEstimator'
+    y_estimator: ['ridge']  
+    t_estimator: ['lr']
+    e_estimator: ['ridge']
+    t_estimator__C: [0.005, 0.01, 0.05, 0.1, 0.5, 1, 5, 10, 50, 100]
+    y_estimator__alpha: [0.01, 0.02, 0.1, 0.2, 1, 2, 10, 20, 100, 200, 1000]
+    e_estimator__alpha: [0.01, 0.02, 0.1, 0.2, 1, 2, 10, 20, 100, 200, 1000]
+
+  dml-xgb: 
+    label: 'DMLCATEEstimator (XGBoost)'
+    estimator: 'DMLCATEEstimator'
+    y_estimator: ['xgbr']
+    t_estimator: ['xgbc']
+    e_estimator: ['xgbr']
+    y_estimator__tree_method: ['hist']
+    t_estimator__tree_method: ['hist']
+    e_estimator__tree_method: ['hist']
+    y_estimator__eta: [0.1, 0.3, 0.5, 0.7]
+    t_estimator__eta: [0.1, 0.3, 0.5, 0.7]
+    e_estimator__eta: [0.1, 0.3, 0.5, 0.7]
+    y_estimator__max_depth: [3, 5, 7, 9]
+    t_estimator__max_depth: [3, 5, 7, 9]
+    e_estimator__max_depth: [3, 5, 7, 9]
+
+  dml-rf: 
+    label: 'DMLCATEEstimator (RandomForest)'
+    estimator: 'DMLCATEEstimator'
+    y_estimator: ['rfr']
+    t_estimator: ['rfc']
+    e_estimator: ['rfr']
+    y_estimator__min_samples_leaf: [10, 50, 100]
+    t_estimator__min_samples_leaf: [10, 50, 100]
+    e_estimator__min_samples_leaf: [10, 50, 100]
+    
+  
